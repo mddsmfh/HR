@@ -1,0 +1,679 @@
+﻿
+@{
+    Layout = null;
+}
+
+@using Model;
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>My JSP 'interview-register.jsp' starting page</title>
+    <link rel="stylesheet"
+          href="../../../css/table.css" type="text/css">
+    <link rel="stylesheet"
+          href="../../../css/cwcalendar.css"
+          type="text/css">
+    <script type="text/javascript"
+            src="../../../javascript/comm/comm.js">
+
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/comm/list.js">
+
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/calendar-ch.js">
+
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/jquery-1.7.2.js">
+
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/locate.js">
+
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/select.js">
+
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/comm/time.js">
+    </script>
+
+
+    <script type="text/javascript">
+        function search() {
+            if (document.getElementById("date").value == "") {
+                alert("请选择面试时间");
+            } else {
+                document.interviewForm.submit();
+            }
+        }
+    </script>
+
+    <script src="~/Scripts/vue/dist/vue.js"></script>
+    <script src="~/Scripts/element-ui/lib/index.js"></script>
+    <link href="~/Scripts/element-ui/lib/theme-chalk/index.css" rel="stylesheet" />
+    <script src="~/Scripts/axios/dist/axios.js"></script>
+</head>
+
+<body>
+    @{Engage_interview interview = ViewBag.s2; }
+    @{Engage_resume resume = ViewBag.s1; }
+    <div id="app">
+        <form id="recruitAction!toList" name="interviewForm" action="" method="post">
+            <input type="hidden" name="operate" value="doAdopt">
+            <!--	<input type="hidden" name="engageInterview.checkStatus" value=""/>
+            <input type="hidden" name="engageInterview.checkComment" value=""/>
+              -->
+            <input type="hidden" name="engageInterview.einId" value="" />
+            <input type="hidden" name="engageInterview.result" value="完成" />
+            <input type="hidden" name="engageInterview.resumeId" value="542" />
+            <input type="hidden" name="engageResume.resId" value="542" />
+            <input type="hidden" name="engageInterview.interviewStatus" value="true" />
+            <table width="100%">
+                <tr>
+                    <td>
+
+                        <font color="black">您正在做的业务是：人力资源--招聘管理--面试管理--面试结果登记  </font>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        <input type="button" value="面试登记" class="BUTTON_STYLE1"
+                               v-on:click="search()">
+                        <input type="button" value="返回" class="BUTTON_STYLE1"
+                               onclick="history.back();">
+
+                    </td>
+                </tr>
+            </table>
+            <table width="100%" border="1" cellpadding=0 cellspacing=1
+                   bordercolorlight=#848284 bordercolordark=#eeeeee
+                   class="TABLE_STYLE1">
+                <tr>
+                    <td class="TD_STYLE1" width="10%">
+                        职位分类
+                    </td>
+                    <td width="10%" class="TD_STYLE2">
+                        <input type="hidden" name="engageInterview.humanMajorKindId" v-model="flid"  />
+                        <input type="text" name="engageInterview.humanMajorKindName" v-model="fl" readonly="readonly" class="INPUT_STYLE2">
+                    </td>
+                    <td width="10%" class="TD_STYLE1">
+                        职位名称
+                    </td>
+                    <td width="15%" class="TD_STYLE2">
+                        <input type="hidden" name="engageInterview.humanMajorId" v-model="mcid" />
+                        <input type="text" name="engageInterview.humanMajorName" v-model="mc" readonly="readonly" class="INPUT_STYLE2">
+                    </td>
+                    <td width="10%" class="TD_STYLE1">
+                        招聘类型
+                    </td>
+                    <td width="20%" class="TD_STYLE2" colspan="2">
+                        <input type="text" name="engageResume.engageType" v-model="lx" readonly="readonly" class="INPUT_STYLE2">
+                    </td>
+
+                    <td width="10%" rowspan="6" align="center">
+                        <el-upload class="avatar-uploader"
+                                   action="/ZhaoP/WSCD"
+                                   :show-file-list="false"
+                                   :on-success="handleAvatarSuccess"
+                                   :before-upload="beforeAvatarUpload">
+                            <img style="width:150px;height:90px" v-if="imageUrl" :src="imageUrl" class="avatar">
+                        </el-upload>
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <td class="TD_STYLE1">
+                        姓名
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="engageInterview.humanName" v-model="xm" readonly="readonly" class="INPUT_STYLE2">
+
+                    </td>
+                    <td class="TD_STYLE1">
+                        性别
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="engageResume.humanSex" v-model="xb" readonly="readonly" class="INPUT_STYLE2">
+                    </td>
+                    <td class="TD_STYLE1">
+                        EMAIL
+                    </td>
+                    <td colspan="2" class="TD_STYLE2">
+                        <input type="text" name="engageResume.humanEmail" v-model="emal" readonly="readonly" class="INPUT_STYLE2">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="TD_STYLE1">
+                        电话号码
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="engageResume.humanTelephone" v-model="dh" readonly="readonly" class="INPUT_STYLE2">
+                    </td>
+                    <td class="TD_STYLE1">
+                        家庭电话
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="engageResume.humanHomephone" v-model="jdh" readonly="readonly" class="INPUT_STYLE2">
+                    </td>
+                    <td class="TD_STYLE1">
+                        手机
+                    </td>
+                    <td colspan="2" class="TD_STYLE2">
+                        <input type="text" name="engageResume.humanMobilephone" v-model="sj" readonly="readonly" class="INPUT_STYLE2">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="TD_STYLE1">
+                        住址
+                    </td>
+                    <td colspan="3" class="TD_STYLE2">
+                        <input type="text" name="engageResume.humanAddress" v-model="dz" readonly="readonly" class="INPUT_STYLE2">
+                    </td>
+                    <td class="TD_STYLE1">
+                        邮编
+                    </td>
+                    <td colspan="2" class="TD_STYLE2">
+                        <input type="text" name="engageResume.humanPostcode" v-model="yb1" readonly="readonly" class="INPUT_STYLE2">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="TD_STYLE1">
+                        国籍
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="engageResume.humanNationality" v-model="gj" readonly="readonly" class="INPUT_STYLE2">
+                    </td>
+                    <td class="TD_STYLE1">
+                        出生地
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="engageResume.humanBirthplace" v-model="csd" readonly="readonly" class="INPUT_STYLE2">
+                    </td>
+                    <td class="TD_STYLE1">
+                        生日
+                    </td>
+                    <td class="TD_STYLE2" colspan="2">
+                        <input type="text" name="engageResume.humanBirthday" v-model="sr" readonly="readonly" class="INPUT_STYLE2">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td width="11%" class="TD_STYLE1">
+                        民族
+                    </td>
+                    <td class="TD_STYLE2" width="14%">
+                        <input type="text" name="engageResume.humanRace" v-model="mz" readonly="readonly" class="INPUT_STYLE2">
+                    </td>
+                    <td class="TD_STYLE1">
+                        宗教信仰
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="engageResume.humanReligion" v-model="zjxy" readonly="readonly" class="INPUT_STYLE2">
+                    </td>
+                    <td class="TD_STYLE1">
+                        政治面貌
+                    </td>
+                    <td class="TD_STYLE2" colspan="2">
+                        <input type="text" name="engageResume.humanParty" v-model="zm" readonly="readonly" class="INPUT_STYLE2">
+                    </td>
+                </tr>
+                <tr>
+
+                    <td class="TD_STYLE1">
+                        身份证号码
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="engageResume.humanIdcard" v-model="idc" readonly="readonly" class="INPUT_STYLE2">
+                    </td>
+                    <td class="TD_STYLE1">
+                        年龄
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="engageResume.humanAge" v-model="nl" readonly="readonly" class="INPUT_STYLE2">
+                    </td>
+                    <td class="TD_STYLE1">
+                        毕业学校
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="engageResume.humanCollege" v-model="by" readonly="readonly" class="INPUT_STYLE2">
+                    </td>
+                    <td class="TD_STYLE1" width="10%">
+                        学历
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="engageResume.humanEducatedDegree" v-model="xl" readonly="readonly" class="INPUT_STYLE2">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="TD_STYLE1">
+                        教育年限
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="engageResume.humanEducatedYears" v-model="nx" readonly="readonly" class="INPUT_STYLE2">
+                    </td>
+                    <td class="TD_STYLE1">
+                        学历专业
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="engageResume.humanEducatedMajor" v-model="zy" readonly="readonly" class="INPUT_STYLE2">
+                    </td>
+                    <td class="TD_STYLE1">
+                        薪酬要求
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="engageResume.demandSalaryStandard" v-model="xc" readonly="readonly" class="INPUT_STYLE2">
+                    </td>
+                    <td class="TD_STYLE1">
+                        注册时间
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="engageResume.registTime" v-model="zcsj" readonly="readonly" class="INPUT_STYLE2">
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="TD_STYLE1">
+                        特长
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="engageResume.humanSpecility" v-model="tc" readonly="readonly" class="INPUT_STYLE2">
+                    </td>
+                    <td class="TD_STYLE1">
+                        爱好
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="engageResume.humanHobby" v-model="ah" readonly="readonly" class="INPUT_STYLE2">
+                    </td>
+                    <td class="TD_STYLE1">
+                        <span style="font-size: 10.5pt; font-family: 宋体;"></span>
+                        推荐人
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="engageInterview.checker" v-model="tjr" readonly="readonly" class="INPUT_STYLE2">
+                    </td>
+                    <td class="TD_STYLE1">
+                        <span style="font-size: 10.5pt; font-family: 宋体;"></span>
+                        推荐时间
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="engageInterview.checkTime" v-model="tjsj" readonly="readonly" class="INPUT_STYLE2">
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="TD_STYLE1">
+                        个人履历
+                    </td>
+                    <td colspan="7" class="TD_STYLE2">
+                        <textarea name="engageResume.humanHistoryRecords" rows="4"
+                                  class="TEXTAREA_STYLE1" readonly="readonly" v-model="lul"> 
+						</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="TD_STYLE1">
+                        备注
+                    </td>
+                    <td colspan="7" class="TD_STYLE2">
+                        <textarea name="engageResume.remark" rows="4" class="TEXTAREA_STYLE1" v-model="bz" readonly="readonly"> 
+						</textarea>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="TD_STYLE1">
+                        推荐意见
+                    </td>
+                    @*<td class="TD_STYLE2" colspan="7">
+            <textarea name="engageResume.recomandation" v-model="tj" rows="4" class="TEXTAREA_STYLE1" readonly="readonly"></textarea>
+        </td>*@
+                    <td colspan="7" class="TD_STYLE2">
+                        <textarea name="engageResume.recomandation" rows="4" readonly="readonly"
+                                  class="TEXTAREA_STYLE1"> &#25512;&#33616;						
+						</textarea>
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td class="TD_STYLE1">
+                        面试次数
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="hidden" value="1" name="engageInterview.interviewAmount" />
+                        <input type="text" v-model="cs" class="INPUT_STYLE2" readonly="readonly" />
+                    </td>
+                    <td class="TD_STYLE1">
+                        形象评价
+                    </td>
+                    <td class="TD_STYLE2">
+                        <select name="engageInterview.imageDegree" class="SELECT_STYLE1" v-model="xx">
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                        </select>
+                    </td>
+                    <td class="TD_STYLE1">
+                        口才评价
+                    </td>
+                    <td class="TD_STYLE2">
+                        <select name="engageInterview.nativeLanguageDegree" class="SELECT_STYLE1" v-model="kc">
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                        </select>
+                    </td>
+                    <td class="TD_STYLE1">
+                        外语口语能力
+                    </td>
+                    <td class="TD_STYLE1">
+                        <select name="engageInterview.foreignLanguageDegree" class="SELECT_STYLE1" v-model="wy">
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="TD_STYLE1">
+                        应变能力
+                    </td>
+                    <td class="TD_STYLE2">
+                        <select name="engageInterview.responseSpeedDegree" class="SELECT_STYLE1" v-model="yb">
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                        </select>
+                    </td>
+                    <td class="TD_STYLE1">
+                        EQ
+                    </td>
+                    <td class="TD_STYLE2">
+                        <select name="engageInterview.eqDegree" class="SELECT_STYLE1" v-model="eq">
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                        </select>
+                    </td>
+                    <td class="TD_STYLE1">
+                        IQ
+                    </td>
+                    <td class="TD_STYLE2">
+                        <select name="engageInterview.iqDegree" class="SELECT_STYLE1" v-model="iq">
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                        </select>
+                    </td>
+                    <td class="TD_STYLE1">
+                        综合素质
+                    </td>
+                    <td class="TD_STYLE1">
+                        <select name="engageInterview.multiQualityDegree" class="SELECT_STYLE1" v-model="sz">
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="TD_STYLE1">
+                        面试人
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="engageInterview.register" v-model="msr" class="INPUT_STYLE2"  />
+                    </td>
+                    <td class="TD_STYLE1">
+                        面试时间
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="engageInterview.registeTime" v-model="mssj" onclick="aa('engageInterview.registeTime')"
+                               class="INPUT_STYLE2" id="date">
+                    </td>
+                    <td class="TD_STYLE1">
+                        &nbsp;
+                    </td>
+                    <td class="TD_STYLE2">
+                        &nbsp;
+                    </td>
+                    <td class="TD_STYLE1">
+                        &nbsp;
+                    </td>
+                    <td class="TD_STYLE2">
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td class="TD_STYLE1">
+                        面试评价
+                    </td>
+                    <td class="TD_STYLE2" colspan="7">
+                        <textarea name="engageInterview.interviewComment" class="TEXTAREA_STYLE1" v-model="mspj"
+                                  rows="4"></textarea>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+
+    <script type="text/javascript">
+        var vm = new Vue({
+            el: "#app",
+            data() {
+                return {
+                    jlbh:"",
+                    fl: "",
+                    flid: "",
+                    mc: "",
+                    mcid: "",
+                    lx: "",
+                    xm: "",
+                    xb: "",
+                    emal: "",
+                    dh: "",
+                    jdh: "",
+                    sj: "",
+                    dz: "",
+                    yb1: "",
+                    gj: "",
+                    csd: "",
+                    sr: "",
+                    mz: "",
+                    zjxy: "",
+                    zm: "",
+                    idc: "",
+                    nl: "",
+                    by: "",
+                    xl: "",
+                    nx: "",
+                    zy: "",
+                    xc: "",
+                    zcsj: "",
+                    tc: "",
+                    ah: "",
+                    tjr: "",
+                    tjsj: "",
+                    lul: "",
+                    bz: "",
+                    yj: "",
+
+                    cs: 1,
+                    xx: "A",
+                    kc: "A",
+                    wy: "A",
+                    yb: "A",
+                    eq: "A",
+                    iq: "A",
+                    sz: "A",
+                    msr: "",
+                    mssj: "",
+                    mspj: "",
+
+                    imageUrl: '',
+                  
+
+                }
+            },
+            methods: {
+                search() {
+                    var a = this.cs + 1;
+                    var endDateInput = document.getElementsByName('engageInterview.registeTime')[0];
+
+                    var startDate = endDateInput.value;
+
+
+                    axios.get("/ZhaoP/MSDTJf", {
+                        params: {
+                            human_name: this.xm,
+                            interview_amount: a,
+                            human_major_kind_id: this.flid,
+                            human_major_kind_name:this.fl,
+                            human_major_id:this.mcid,
+                            human_major_name:this.mc,
+                            image_degree: this.xx,
+                            native_language_degree: this.kc,
+                            foreign_language_degree: this.wy,
+                            response_speed_degree: this.yb,
+                            EQ_degree: this.eq,
+                            IQ_degree:this.iq,
+                            multi_quality_degree:this.sz,
+                            register: this.msr,
+                            registe_time: startDate,
+                            resume_id: this.jlbh,
+                            interview_comment:this.mspj,
+                            interview_status: 1,    
+                            id: this.jlbh
+                        }
+                    })
+                        .then(res => {
+                            if (res.data == "1") {
+                                location.href = 'MSD';
+                            }
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                },
+                find() {
+                    this.jlbh= @Html.Raw(Json.Encode(resume.res_id));
+
+                    this.fl = @Html.Raw(Json.Encode(resume.human_major_kind_name));
+                    this.mc = @Html.Raw(Json.Encode(resume.human_major_name));
+                    this.flid = @Html.Raw(Json.Encode(resume.human_major_kind_id));
+                    this.mcid = @Html.Raw(Json.Encode(resume.human_major_id));
+                    this.lx = @Html.Raw(Json.Encode(resume.engage_type));
+                    this.xm = @Html.Raw(Json.Encode(resume.human_name));
+                    this.xb = @Html.Raw(Json.Encode(resume.human_sex));
+                    this.emal = @Html.Raw(Json.Encode(resume.human_email));
+                    this.dh = @Html.Raw(Json.Encode(resume.human_telephone));
+                    this.jdh = @Html.Raw(Json.Encode(resume.human_homephone));
+                    this.sj = @Html.Raw(Json.Encode(resume.human_mobilephone));
+                    this.dz = @Html.Raw(Json.Encode(resume.human_address));
+                    this.yb1 = @Html.Raw(Json.Encode(resume.human_postcode));
+                    this.gj = @Html.Raw(Json.Encode(resume.human_nationality));
+                    this.csd = @Html.Raw(Json.Encode(resume.human_birthplace));
+
+                    var a = @Html.Raw(Json.Encode(resume.human_birthday));
+                    const isoDate = a; // ISO 格式的日期时间
+                    const date = new Date(parseInt(isoDate.substr(6))); // 解析 Microsoft JSON 日期格式
+                    const formattedDateTime = date.toLocaleString(); // 转换为本地格式  2023/8/30 16:44:21
+                    this.sr = formattedDateTime; // 更新日期时间字段的值
+
+                    this.mz = @Html.Raw(Json.Encode(resume.human_race));
+                    this.zjxy = @Html.Raw(Json.Encode(resume.human_religion));
+                    this.zm = @Html.Raw(Json.Encode(resume.human_party));
+                    this.idc = @Html.Raw(Json.Encode(resume.human_idcard));
+                    this.nl = @Html.Raw(Json.Encode(resume.human_age));
+                    this.by = @Html.Raw(Json.Encode(resume.human_college));
+                    this.xl = @Html.Raw(Json.Encode(resume.human_educated_degree));
+                    this.nx = @Html.Raw(Json.Encode(resume.human_educated_years));
+                    this.zy = @Html.Raw(Json.Encode(resume.human_educated_major));
+                    this.xc = @Html.Raw(Json.Encode(resume.demand_salary_standard));
+                    this.tc = @Html.Raw(Json.Encode(resume.human_specility));
+                    this.ah = @Html.Raw(Json.Encode(resume.human_hobby));
+                    this.lul = @Html.Raw(Json.Encode(resume.human_history_records));
+                    this.bz = @Html.Raw(Json.Encode(resume.remark));
+                    this.tjr = @Html.Raw(Json.Encode(resume.checker));
+
+                    this.imageUrl=@Html.Raw(Json.Encode(resume.human_picture));
+                    
+                    var b = @Html.Raw(Json.Encode(resume.check_time));
+                    const isoDate2 = b; // ISO 格式的日期时间
+                    const date2 = new Date(parseInt(isoDate2.substr(6))); // 解析 Microsoft JSON 日期格式
+                    const formattedDateTime2 = date2.toLocaleString(); //    转换为本地格式  2023/8/30 16:44:21
+                    this.tjsj = formattedDateTime2; // 更新日期时间字段的值
+
+                    var c = @Html.Raw(Json.Encode(resume.regist_time));
+                    const isoDate3 = c; // ISO 格式的日期时间
+                    const date3 = new Date(parseInt(isoDate3.substr(6))); // 解析 Microsoft JSON 日期格式
+                    const formattedDateTime3 = date3.toLocaleString(); // 转换为本地格式  2023/8/30 16:44:21
+                    this.zcsj = formattedDateTime3; // 更新日期时间字段的值
+
+                    this.tj = @Html.Raw(Json.Encode(resume.recomandation));
+
+
+                    var inte = JSON.parse('@Html.Raw(Json.Encode(ViewBag.s2))');
+
+    if (inte == null) {
+        // 对象为空的处理逻辑
+    } else {
+        var a = inte.interview_amount;
+        this.cs = parseInt(a) + 1;
+        this.xx = inte.image_degree;
+        this.kc = inte.native_language_degree;
+        this.wy = inte.foreign_language_degree;
+        this.yb = inte.response_speed_degree;
+        this.eq = inte.EQ_degree;
+        this.iq = inte.IQ_degree;
+        this.sz = inte.multi_quality_degree;
+        this.msr = inte.register;
+
+        var a = inte.registe_time;
+        const isoDate4 = a; // ISO 格式的日期时间
+        const date4 = new Date(parseInt(isoDate4.substr(6))); // 解析 Microsoft JSON 日期格式
+        const formattedDateTime4 = date4.toLocaleDateString(); //  转换为本地格式    2023/8/30
+        this.mssj = formattedDateTime4; // 更新日期时间字段的值
+
+        this.mspj = inte.interview_comment;
+    }
+
+
+
+
+
+
+                },
+                handleAvatarSuccess(res, file) {
+                   
+
+
+                },
+                beforeAvatarUpload(file) {
+
+                }
+
+
+
+            },
+            mounted: function () {
+                this.find();
+            }
+        })
+    </script>
+
+
+</body>
+
+</html>
+

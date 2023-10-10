@@ -1,0 +1,11 @@
+D:\无用\S3\MVC\HR项目\HR\DAO\bin\Debug\DAO.dll
+D:\无用\S3\MVC\HR项目\HR\DAO\bin\Debug\DAO.pdb
+D:\无用\S3\MVC\HR项目\HR\DAO\bin\Debug\Dapper.dll
+D:\无用\S3\MVC\HR项目\HR\DAO\bin\Debug\Model.dll
+D:\无用\S3\MVC\HR项目\HR\DAO\bin\Debug\Model.pdb
+D:\无用\S3\MVC\HR项目\HR\DAO\bin\Debug\Dapper.xml
+D:\无用\S3\MVC\HR项目\HR\DAO\obj\Debug\DAO.csproj.AssemblyReference.cache
+D:\无用\S3\MVC\HR项目\HR\DAO\obj\Debug\DAO.csproj.CoreCompileInputs.cache
+D:\无用\S3\MVC\HR项目\HR\DAO\obj\Debug\DAO.csproj.CopyComplete
+D:\无用\S3\MVC\HR项目\HR\DAO\obj\Debug\DAO.dll
+D:\无用\S3\MVC\HR项目\HR\DAO\obj\Debug\DAO.pdb

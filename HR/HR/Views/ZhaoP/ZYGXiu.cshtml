@@ -1,0 +1,310 @@
+﻿
+@{
+    Layout = null;
+}
+@using Model;
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet"
+          href="../../../css/table.css" type="text/css">
+    <link rel="stylesheet"
+          href="../../../css/cwcalendar.css" type="text/css">
+    <script type="text/javascript"
+            src="../../../javascript/comm/comm.js">
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/comm/list.js">
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/calendar-ch.js">
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/jquery-1.7.2.js">
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/locate.js">
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/select.js">
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/comm/time.js">
+    </script>
+    <script type="text/javascript">
+        window.onload = check;
+        function tick() {
+            var now = new Date();
+            var hours, minutes, seconds, noon;
+            var intHours, intMinutes, intSeconds;
+            intHours = now.getHours();
+            intMinutes = now.getMinutes();
+            intSeconds = now.getSeconds();
+            if (intHours < 24) {
+                hours = intHours + ":";
+                noon = "A.M.";
+            } else {
+                intHours = intHours - 24;
+                hours = intHours + ":";
+                noon = "P.M.";
+            }
+            if (intMinutes < 10) {
+                minutes = "0" + intMinutes + ":";
+            } else {
+                minutes = intMinutes + ":";
+            }
+            if (intSeconds < 10) {
+                seconds = "0" + intSeconds + " ";
+            } else {
+                seconds = intSeconds + " ";
+            }
+            timeString = hours + minutes + seconds;
+            var now = new Date();
+            document.getElementById("nowTime").value = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate() + " " + timeString;
+            window.setTimeout("tick();", 1000);
+        }
+
+        //load事件
+        function check() {
+            //获得系统当前时间的方法
+            tick();
+        }
+    </script>
+
+    <script type="text/javascript">
+        function mySubmit() {
+            document.humanfileForm.submit();
+        }
+
+
+    </script> 
+
+    <script src="~/Scripts/vue/dist/vue.js"></script>
+    <script src="~/Scripts/element-ui/lib/index.js"></script>
+    <link href="~/Scripts/element-ui/lib/theme-chalk/index.css" rel="stylesheet" />
+    <script src="~/Scripts/axios/dist/axios.js"></script>
+</head>
+<body>
+    @{Major_release major_Release = ViewBag.s; }
+    <div id="app">
+        <form id="recruitAction!applyPosition" name="humanfileForm" action="" method="post">
+
+            <table width="100%">
+                <tr>
+                    <td>
+                        <font color="black">您正在做的业务是：人力资源--招聘管理--职位发布管理--职位发布变更 </font>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        <input type="button" value="提交" class="BUTTON_STYLE1"
+                               v-on:click="ti()">
+                        <input type="reset" value="清除" class="BUTTON_STYLE1">
+                    </td>
+                </tr>
+            </table>
+            <table width="100%" border="1" cellpadding=0 cellspacing=1
+                   bordercolorlight=#848284 bordercolordark=#eeeeee
+                   class="TABLE_STYLE1">
+                <tr>
+                    <td class="TD_STYLE1" width="11%">
+                        I级机构
+                    </td>
+                    <td width="14%" class="TD_STYLE2">
+                        <input type="hidden" name="emajorRelease.firstKindName" value="&#38598;&#22242;" />
+                        <input type="hidden" name="emajorRelease.firstKindId" value="01" />
+                       {{yi}}
+
+                    </td>
+                    <td width="11%" class="TD_STYLE1">
+                        II级机构
+                    </td>
+                    <td width="14%" class="TD_STYLE2">
+                        <input type="hidden" name="emajorRelease.secondKindName" value="&#29983;&#29289;&#31185;&#25216;&#26377;&#38480;&#20844;&#21496;" />
+                        <input type="hidden" name="emajorRelease.secondKindId" value="02" />
+                       {{er}}
+                    </td>
+                    <td width="11%" class="TD_STYLE1">
+                        III级机构
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="hidden" name="emajorRelease.thirdKindName" value="&#33647;&#24215;" />
+                        <input type="hidden" name="emajorRelease.thirdKindId" value="01" />
+                     {{san}}
+                    </td>
+                    <td width="11%" class="TD_STYLE1">
+                        招聘类型
+                    </td>
+                    <td class="TD_STYLE2" colspan="2">
+
+                        <select name="emajorRelease.engageType" id="engageType" class="SELECT_STYLE1" v-model="zp">
+
+                            <option selected>校园招聘</option>
+
+                            <option selected>社会招聘</option>
+
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="TD_STYLE1">
+                        职位分类
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="hidden" name="emajorRelease.majorKindName" value="&#38144;&#21806;" />
+                        <input type="hidden" name="emajorRelease.majorKindId" value="01" />
+                      {{fl}}
+                    </td>
+                    <td class="TD_STYLE1">
+                        职位名称
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="hidden" name="emajorRelease.majorName" value="&#24635;&#32463;&#29702;" />
+                        <input type="hidden" name="emajorRelease.majorId" value="02" />
+                       {{mc}}
+                    </td>
+                    <td class="TD_STYLE1">
+                        招聘人数
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="emajorRelease.humanAmount" v-model="rs" class="INPUT_STYLE2" style="width:162px">
+                    </td>
+                    <td class="TD_STYLE1">
+                        截止日期
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="emajorRelease.deadline"
+                               class="INPUT_STYLE2" onclick="aa('emajorRelease.deadline')" v-model="jrq" style="width:162px">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="TD_STYLE1">
+                        变更人
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="emajorRelease.changer" v-model="bgr" class="INPUT_STYLE2" style="width:162px">
+                    </td>
+                    <td class="TD_STYLE1">
+                        变更时间
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="emajorRelease.changeTime"
+                               v-model="bsj" id="nowTime"
+                               class="INPUT_STYLE2" style="width:162px">
+                    </td>
+
+                    <td>&nbsp; </td>
+                    <td>&nbsp; </td>
+                    <td>&nbsp; </td>
+                    <td>&nbsp; </td>
+
+                </tr>
+                <tr>
+                    <td class="TD_STYLE1">
+                        职位描述
+                    </td>
+                    <td class="TD_STYLE2" colspan="8">
+                        <textarea name="emajorRelease.majorDescribe" rows="4" cols="100" class="TEXTAREA_STYLE1" v-model="ms"></textarea>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td class="TD_STYLE1">
+                        招聘要求
+                    </td>
+                    <td class="TD_STYLE2" colspan="8">
+                        <textarea name="emajorRelease.engageRequired" rows="4" cols="100" class="TEXTAREA_STYLE1" v-model="yq"></textarea>
+                    </td>
+
+                </tr>
+            </table>
+        </form>
+    </div>
+
+    <script type="text/javascript">
+        var vm = new Vue({
+            el: "#app",
+            data() {
+                return {
+                    id:0,
+                    yi: "",
+                    er: "",
+                    san: "",
+                    zp: "",
+                    fl: "",
+                    mc: "",
+                    rs: "",
+                    jrq: "",
+                    bgr: "",
+                    bsj: "",
+                    ms: "",
+                    yq:""
+                }
+            },
+            methods: {
+                find() {
+                    this.id=@Html.Raw(Json.Encode(major_Release.mre_id));
+                    this.yi= @Html.Raw(Json.Encode(major_Release.first_kind_name));
+                    this.er = @Html.Raw(Json.Encode(major_Release.second_kind_name));
+                    this.san = @Html.Raw(Json.Encode(major_Release.third_kind_name));
+                    this.zp = @Html.Raw(Json.Encode(major_Release.engage_type));
+                    this.fl = @Html.Raw(Json.Encode(major_Release.major_kind_name));
+                    this.mc = @Html.Raw(Json.Encode(major_Release.major_name));
+                    this.rs = @Html.Raw(Json.Encode(major_Release.human_amount));
+
+                    var a = @Html.Raw(Json.Encode(major_Release.deadline));
+                    const isoDate = a; // ISO 格式的日期时间
+                    const date = new Date(parseInt(isoDate.substr(6))); // 解析 Microsoft JSON 日期格式
+                    const formattedDateTime = date.toLocaleDateString(); // 转换为本地格式
+                    this.jrq = formattedDateTime; // 更新日期时间字段的值
+
+                    this.bgr = @Html.Raw(Json.Encode(major_Release.changer));
+                    this.bsj = @Html.Raw(Json.Encode(major_Release.change_time));
+                    this.ms = @Html.Raw(Json.Encode(major_Release.major_describe));
+                    this.yq= @Html.Raw(Json.Encode(major_Release.engage_required));
+                },
+                ti() {
+
+                    const datetimeValue = new Date(this.jrq);
+                    var formattedDateTime = datetimeValue.toISOString();
+                    var loginTime = document.getElementById("nowTime").value;
+                
+                    axios.get("/ZhaoP/ZYGXiuu", {
+                        params: {
+                            engage_type: this.zp,
+                            human_amount: this.rs,
+                            deadline: formattedDateTime,
+                            changer: this.bgr,
+                            change_time: loginTime,
+                            major_describe: this.ms,
+                            engage_required: this.yq,
+                            mre_id: this.id,
+                        }
+                    })
+                        .then(res => {
+                            if (res.data == "1") {
+                                location.href = 'ZYG';
+                            } else {
+
+                            }
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                }
+            },
+            mounted: function () {
+                this.find();
+            }
+        })
+    </script>
+
+
+</body>
+
+</html>
+
+
+

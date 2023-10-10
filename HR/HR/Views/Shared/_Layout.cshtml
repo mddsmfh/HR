@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <script src="~/Scripts/vue/dist/vue.js"></script>
+    <script src="~/Scripts/element-ui/lib/index.js"></script>
+    <link href="~/Scripts/element-ui/lib/theme-chalk/index.css" rel="stylesheet" />
+    <script src="~/Scripts/axios/dist/axios.js"></script>
+</head>
+<body>
+    <div id="app">
+        @RenderBody()
+        <footer>
+        </footer>
+    </div>
+    <script type="text/javascript">
+        var vm = new Vue({
+            el: "#app"
+        })
+    </script>
+</body>
+</html>

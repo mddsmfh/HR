@@ -1,0 +1,149 @@
+﻿
+@{
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <style type=text/css>
+        body {
+            font-size: 12px;
+            color: #ffffff;
+            font-family: 宋体
+        }
+
+        td {
+            font-size: 12px;
+            color: #ffffff;
+            font-family: 宋体
+        }
+    </style>
+    <script src="~/javascript/jquery-1.7.2.js"></script>
+    <script src="~/javascript/jquery.messager.js"></script>
+    <script src="~/Scripts/vue/dist/vue.js"></script>
+    <script src="~/Scripts/element-ui/lib/index.js"></script>
+    <link href="~/Scripts/element-ui/lib/theme-chalk/index.css" rel="stylesheet" />
+    <script src="~/Scripts/axios/dist/axios.js"></script>
+
+</head>
+<body>
+    <form action="" method="post">
+        <div>
+            <table cellspacing=0 cellpadding=0 width=900 align=center border=0>
+                <tbody>
+                    <tr>
+                        <td style="height: 105px">
+                            <img src="~/images/login_11.gif" border=0>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td background="~/images/login_22.jpg" height=300>
+                            <table height=300 cellpadding=0 width=900 border=0>
+                                <tbody>
+                                    <tr>
+                                        <td colspan=2 height=35></td>
+                                    </tr>
+                                    <tr>
+                                        <td width=360></td>
+                                        <td>
+                                            <table cellspacing=0 cellpadding=2 border=0>
+                                                <tbody>
+                                                    <tr>
+                                                        <td style="height: 28px" width=80>
+                                                            登 录 名：
+                                                        </td>
+                                                        <td style="height: 28px" width=150>
+                                                            <input id="userName" style="width: 130px" />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="height: 28px">
+                                                            登录密码：
+                                                        </td>
+                                                        <td style="height: 28px">
+                                                            <input id="userPassword" style="width: 130px" type="password" />
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td style="height: 18px"></td>
+                                                        <td style="height: 18px"></td>
+                                                        <td style="height: 18px"></td>
+                                                    </tr>
+                                                    <tr>
+
+                                                        <td>
+                                                            <input type="button" value="登录" style="cursor: pointer;" />
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img src="~/images/login_33.jpg"  border=0>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </form>
+
+<script type="text/javascript">
+    $(function () {
+        $(":button").click(function () {
+            doLogin();
+        });
+        $("html").die().live("keydown", function (event) {
+            if (event.keyCode == 13) {
+                doLogin();
+            }
+        });
+    });
+
+    function doLogin() {
+        var userName = $("#userName");
+        var userPassword = $("#userPassword");
+        var reg = /^\S{6,}$/;
+        if (!reg.test(userName.val())) {
+            userName[0].select();
+            //alert("登录名格式不正确！长度必须大于6位且不能有空格！");
+            $.messager.show("消息提示", "登录名格式不正确！长度必须大于6位且不能有空格！", 2000);
+            return false;
+        }
+        if (!reg.test(userPassword.val())) {
+            userPassword[0].select();
+            //alert("登录密码格式不正确！长度必须大于6位且不能有空格！");
+            $.messager.show("消息提示", "登录密码格式不正确！长度必须大于6位且不能有空格！", 2000);
+            return false;
+        }
+        axios.get("/HR/logindl", {
+            params: {
+                u_name: userName.val(),
+                u_password: userPassword.val()
+            }
+        }) .then(res => {
+            if (res.data == "1") {
+                location.href = "/HR/Index?name=" + userName.val();
+            } else {
+                $.messager.show("消息提示", "用户名或密码不正确！", 2000);
+            }
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        
+    }
+</script>
+
+</body>
+</html>
+

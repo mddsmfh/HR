@@ -1,0 +1,137 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet"
+          href="../../css/table.css" type="text/css">
+    <script type="text/javascript"
+            src="../../javascript/comm/comm.js">
+    </script>
+    <script src="~/Scripts/vue/dist/vue.js"></script>
+    <script src="~/Scripts/element-ui/lib/index.js"></script>
+    <link href="~/Scripts/element-ui/lib/theme-chalk/index.css" rel="stylesheet" />
+    <script src="~/Scripts/axios/dist/axios.js"></script>
+    <style type="text/css">
+        .el-table tr {
+            background-color: #FFFFCC;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <form method="post" action="../customiz/customizAction!findFirstKind">
+            <table width="100%">
+                <tr>
+                    <td>
+                        <font color="black">
+                            您正在做的业务是：人力资源--客户化设置--人力资源档案管理设置--I级机构设置
+                        </font>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        <input type="button" value="添加" class="BUTTON_STYLE1" onclick="window.location.href='/KeHu/Tian'">
+                    </td>
+                </tr>
+            </table>
+
+            <el-table :data="tableData"
+                      style="width: 100%"
+                      :header-cell-style="{color: '#C8D6F1', fontSize: '18px', height:'64px',  background: '#FFFFCC'}">
+                <el-table-column fixed
+                                 prop="ffk_id"
+                                 label="编号"
+                                 v-if="f"
+                                 width="150">
+                </el-table-column>
+                <el-table-column fixed
+                                 prop="first_kind_id"
+                                 label="I级机构编号"
+                                 width="150">
+                </el-table-column>
+                <el-table-column fixed
+                                 prop="first_kind_name"
+                                 label="I级机构名称"
+                                 width="150">
+                </el-table-column>
+                <el-table-column fixed
+                                 prop="first_kind_salary_id"
+                                 label="薪酬发放责任人编号"
+                                 width="150">
+                </el-table-column>
+                <el-table-column fixed
+                                 prop="first_kind_sale_id"
+                                 label="销售责任人编号"
+                                 width="150">
+                </el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button size="mini"
+                                   v-on:click="handleEdit(scope.row)">编辑</el-button>
+                        <el-button size="mini"
+                                   type="danger"
+                                   v-on:click="handleDelete( scope.row)">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </form>
+    </div>
+
+    <script type="text/javascript">
+        var vm = new Vue({
+            el: "#app",
+            data() {
+                return {
+                    tableData: [],//进行存储一级全部信息
+                    f: false
+                }
+            },
+            methods: {
+                //进行查询所有信息
+                fill() {
+                    axios.get("/KeHu/Syzbw")
+                        .then(res => {
+                            this.tableData = res.data;
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                },
+                handleEdit(row) {
+                    console.log(row);
+                    location.href = "/KeHu/Xiu?id=" + row.ffk_id;
+                },
+                handleDelete(row) {
+                    if (confirm("是否进行删除!")) {
+                        console.log(row);
+                        axios.get("/KeHu/Sc?id=" + row.ffk_id)
+                            .then(res => {
+                                if (res.data == "1") {
+                                    location.href = 'ScYe';
+                                } else {
+
+                                }
+                            })
+                            .catch(err => {
+
+                            })
+                    } else {
+
+                    }
+                }
+            },
+            mounted: function () {
+                this.fill();
+            }
+        }
+        )
+    </script>
+</body>
+</html>

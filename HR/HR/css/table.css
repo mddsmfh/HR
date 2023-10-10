@@ -1,0 +1,193 @@
+/* CSS Document */
+* {
+	FONT-FAMILY:微软雅黑;
+}
+.resizeDivClass
+{
+position:relative;
+background-color:#DEDBD6;
+width:2;
+z-index:1;
+left:expression(this.parentElement.offsetWidth-1);
+cursor:e-resize;
+
+}
+A:visited {
+	TEXT-DECORATION: none
+}
+A:active {
+	TEXT-DECORATION: none
+}
+A:hover {
+	TEXT-DECORATION: underline overline
+}
+A:link {
+	TEXT-DECORATION: none
+}
+.t {
+	LINE-HEIGHT: 1.4
+}
+BODY {
+	background-color:#FFFFCC;
+	FONT-SIZE: 10pt;
+	SCROLLBAR-HIGHLIGHT-COLOR: buttonface;
+	SCROLLBAR-SHADOW-COLOR: buttonface;
+	SCROLLBAR-3DLIGHT-COLOR: buttonhighlight;
+	SCROLLBAR-TRACK-COLOR: #eeeeee;
+	SCROLLBAR-DARKSHADOW-COLOR: buttonshadow;
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+}
+TD {
+	FONT-FAMILY: ??; FONT-SIZE: 9pt
+}
+DIV {
+	FONT-FAMILY: ??; FONT-SIZE: 9pt
+}
+FORM {
+	FONT-FAMILY: ??; FONT-SIZE: 9pt
+}
+OPTION {
+	FONT-FAMILY: ??; FONT-SIZE: 9pt
+}
+P {
+	FONT-FAMILY: ??; FONT-SIZE: 9pt
+}
+TD {
+	FONT-FAMILY: ??; FONT-SIZE: 9pt
+}
+BR {
+	FONT-FAMILY: ����; FONT-SIZE: 9pt
+}
+
+TEXTAREA {
+	BACKGROUND-COLOR: #FFFFCC; BORDER-BOTTOM-COLOR: #000000; BORDER-BOTTOM-WIDTH: 1px; BORDER-LEFT-COLOR: #000000; BORDER-LEFT-WIDTH: 1px; BORDER-RIGHT-COLOR: #000000; BORDER-RIGHT-WIDTH: 1px; BORDER-TOP-COLOR: #000000; BORDER-TOP-WIDTH: 1px; FONT-FAMILY: ���� ; FONT-SIZE: 9pt
+}
+SELECT {
+	BACKGROUND-COLOR: #FFFFCC; BORDER-BOTTOM-COLOR: #000000; BORDER-BOTTOM-WIDTH: 1px; BORDER-LEFT-COLOR: #000000; BORDER-LEFT-WIDTH: 1px; BORDER-RIGHT-COLOR: #000000; BORDER-RIGHT-WIDTH: 1px; BORDER-TOP-COLOR: #000000; BORDER-TOP-WIDTH: 1px; FONT-FAMILY: ���� ; FONT-SIZE: 9pt
+}
+
+.gray {
+	CURSOR: pointer; FILTER: gray
+}
+.style3 {
+	font-size: 16px;
+	font-weight: bold;
+}
+.TABLE_STYLE1{
+	border: 1px solid;
+	border-color:#000000;
+	border-collapse: collapse;
+	width: 100%;
+	
+}
+.TABLE_STYLE2{
+	width: 100%;
+}
+.ALL-STYLE{
+	border: 1px ridge #666666;
+	border-color:#DEDBD6;
+
+}
+.TR_STYLE1{
+
+}
+
+.style8 {color: #000066}
+
+
+
+.TD_HANDBOOK_STYLE1 {
+	vertical-align : top ;
+	width:100%;
+	color:#0000FF;
+}
+
+.TD_STYLE1{
+	background-color:#FFDB6F;
+	border-width:1;
+}
+
+.TD_STYLE2{
+border-spacing: 1px;
+background-color:#FFFFBB;
+border-color:#DEDBD6;
+border:0;
+}
+.TD_STYLE3{
+
+}
+.SUBMIT_STYLE1{
+ BORDER-RIGHT: #2C59AA 1px solid; PADDING-RIGHT: 2px; BORDER-TOP: #2C59AA 1px solid; PADDING-LEFT: 2px; FONT-SIZE: 12px; FILTER: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr=#ffffff, EndColorStr=#C3DAF5); BORDER-LEFT: #2C59AA 1px solid; CURSOR: pointer; COLOR: black; PADDING-TOP: 2px; BORDER-BOTTOM: #2C59AA 1px solid
+
+}
+.BUTTON_STYLE1{
+ BORDER-RIGHT: #2C59AA 1px solid; 
+ PADDING-RIGHT: 2px;
+  BORDER-TOP: #2C59AA 1px solid;
+   PADDING-LEFT: 2px; 
+   FONT-SIZE: 12px;
+    FILTER: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr=#ffffff, EndColorStr=#C3DAF5);
+     BORDER-LEFT: #2C59AA 1px solid; 
+     CURSOR: pointer; 
+     COLOR: black; 
+     PADDING-TOP: 2px; 
+     BORDER-BOTTOM: #2C59AA 1px solid
+}
+.RESET_STYLE1{
+ BORDER-RIGHT: #2C59AA 1px solid; PADDING-RIGHT: 2px; BORDER-TOP: #2C59AA 1px solid; PADDING-LEFT: 2px; FONT-SIZE: 12px; FILTER: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr=#ffffff, EndColorStr=#C3DAF5); BORDER-LEFT: #2C59AA 1px solid; CURSOR: pointer; COLOR: black; PADDING-TOP: 2px; BORDER-BOTTOM: #2C59AA 1px solid
+}
+.RADIO_STYLE1{
+
+}
+.CHECKBOX_STYLE1{
+
+}
+.SELECT_STYLE1{
+width:100%;
+}
+.SELECT_STYLE2{
+width:30%;
+}
+.TEXTAREA_STYLE1{
+width:100%;
+}
+.DIV_STYLE1{
+
+float :right ;
+vertical-align : top ;
+
+}
+.DIV_STYLE2{
+
+float :center ;
+vertical-align : top ;
+
+}
+.INPUT_STYLE1{
+BACKGROUND-COLOR: #FFFFCC;
+width:30%
+}
+.INPUT_STYLE2{
+BACKGROUND-COLOR: #FFFFCC;
+width:100%
+}
+.FILE_STYLE1{
+ BORDER-RIGHT: #2C59AA 1px solid; PADDING-RIGHT: 2px; BORDER-TOP: #2C59AA 1px solid; PADDING-LEFT: 2px; FONT-SIZE: 12px; FILTER: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr=#ffffff, EndColorStr=#C3DAF5); BORDER-LEFT: #2C59AA 1px solid; CURSOR: pointer; COLOR: black; PADDING-TOP: 2px; BORDER-BOTTOM: #2C59AA 1px solid
+}
+.btn3_mouseout {
+ BORDER-RIGHT: #2C59AA 1px solid; PADDING-RIGHT: 2px; BORDER-TOP: #2C59AA 1px solid; PADDING-LEFT: 2px; FONT-SIZE: 12px; FILTER: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr=#ffffff, EndColorStr=#C3DAF5); BORDER-LEFT: #2C59AA 1px solid; CURSOR: pointer; COLOR: black; PADDING-TOP: 2px; BORDER-BOTTOM: #2C59AA 1px solid
+}
+.btn3_mouseover {
+ BORDER-RIGHT: #2C59AA 1px solid; PADDING-RIGHT: 2px; BORDER-TOP: #2C59AA 1px solid; PADDING-LEFT: 2px; FONT-SIZE: 12px; FILTER: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr=#ffffff, EndColorStr=#D7E7FA); BORDER-LEFT: #2C59AA 1px solid; CURSOR: pointer; COLOR: black; PADDING-TOP: 2px; BORDER-BOTTOM: #2C59AA 1px solid
+}
+.btn3_mousedown
+{
+ BORDER-RIGHT: #FFE400 1px solid; PADDING-RIGHT: 2px; BORDER-TOP: #FFE400 1px solid; PADDING-LEFT: 2px; FONT-SIZE: 12px; FILTER: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr=#ffffff, EndColorStr=#C3DAF5); BORDER-LEFT: #FFE400 1px solid; CURSOR: pointer; COLOR: black; PADDING-TOP: 2px; BORDER-BOTTOM: #FFE400 1px solid
+}
+.btn3_mouseup {
+ BORDER-RIGHT: #2C59AA 1px solid; PADDING-RIGHT: 2px; BORDER-TOP: #2C59AA 1px solid; PADDING-LEFT: 2px; FONT-SIZE: 12px; FILTER: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr=#ffffff, EndColorStr=#C3DAF5); BORDER-LEFT: #2C59AA 1px solid; CURSOR: pointer; COLOR: black; PADDING-TOP: 2px; BORDER-BOTTOM: #2C59AA 1px solid
+}
+

@@ -1,0 +1,211 @@
+﻿
+@{
+    Layout = null;
+}
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet"
+          href="../../../css/table.css" type="text/css">
+    <link rel="stylesheet"
+          href="../../../css/cwcalendar.css"
+          type="text/css">
+    <script type="text/javascript"
+            src="../../../javascript/comm/comm.js">
+
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/comm/list.js">
+
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/calendar-ch.js">
+
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/jquery-1.7.2.js">
+
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/locate.js">
+
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/select.js">
+
+    </script>
+
+    <script src="~/Scripts/vue/dist/vue.js"></script>
+    <script src="~/Scripts/element-ui/lib/index.js"></script>
+    <link href="~/Scripts/element-ui/lib/theme-chalk/index.css" rel="stylesheet" />
+    <script src="~/Scripts/axios/dist/axios.js"></script>
+    <style type="text/css">
+        .el-table tr {
+            background-color: #FFFFCC;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="app">
+        <form action="" name="fm">
+            <input type="hidden" name="utilBean.currPage" id="page" />
+            <table width="100%">
+                <tr>
+                    <td>
+                        <font color="black">您正在做的业务是：人力资源--招聘管理--录用管理--录用申请  </font>
+                    </td>
+                </tr>
+
+            </table>
+            <el-table :data="tableData"
+                      style="width: 100%"
+                      :header-cell-style="{color: '#C8D6F1', fontSize: '18px', height:'64px',  background: '#FFFFCC'}">
+                <el-table-column fixed
+                                 prop="human_name"
+                                 label="姓名"
+                                 width="150">
+                </el-table-column>
+                <el-table-column fixed
+                                 prop="human_sex"
+                                 label="性别"
+                                 width="150">
+                </el-table-column>
+                <el-table-column fixed
+                                 prop="human_age"
+                                 label="年龄"
+                                 width="150">
+                </el-table-column>
+                <el-table-column fixed
+                                 prop="human_major_kind_name"
+                                 label="职位类别"
+                                 width="150">
+                </el-table-column>
+                <el-table-column fixed
+                                 prop="human_major_name"
+                                 label="职位名称"
+                                 width="150">
+                </el-table-column>
+                <el-table-column fixed
+                                 prop="human_college"
+                                 label="毕业院校"
+                                 width="150">
+                </el-table-column>
+                <el-table-column fixed
+                                 prop="human_educated_major"
+                                 label="学历专业"
+                                 width="150">
+                </el-table-column>
+                <el-table-column label="申请">
+                    <template slot-scope="scope">
+                        <el-button size="mini"
+                                   v-on:click="handleEdit(scope.row)">申请</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <p>
+                &nbsp;&nbsp;总数：{{totals}} 例 &nbsp;&nbsp;&nbsp;
+                <el-button v-on:click="goToFirstPage">首页</el-button>
+                <el-button v-on:click="goToPrevPage">上一页</el-button>
+                <el-button v-on:click="goToNextPage">下一页</el-button>
+                <el-button v-on:click="goToLastPage">尾页</el-button>
+                <el-input v-model="jumpPage" type="number" placeholder="跳转页码" style="width: 10%;"></el-input>
+                <el-button v-on:click="jumpToPage">跳转</el-button>
+
+        </form>
+    </div>
+
+    <script type="text/javascript">
+        var vm = new Vue({
+            el: "#app",
+            data() {
+                return {
+                    tableData: [],
+                    currentPage: 1,
+                    pageSize: 2,
+                    total: 0,
+                    totals: 0,
+                    jumpPage: "",
+                }
+            },
+            methods: {
+                handleEdit(row) {
+                    location.href = "/ZhaoP/LUYAsync?id=" + row.res_id + "&idc=" + row.res_id;
+                },
+                //进行查询所有信息
+                fill() {
+                    axios.get("/ZhaoP/LUYCX", {
+                        params: {
+                            pageSize: this.pageSize,
+                            currentPage: this.currentPage
+                        }
+                    }).then(res => {
+                        this.tableData = res.data.List;
+
+                        this.total = res.data.Rows;
+                        this.totals = res.data.Rowst;
+
+                    })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                },
+                goToFirstPage() {//首页
+                    this.currentPage = 1;
+                    this.fill();
+
+                },
+                goToPrevPage() {//上一页
+                    if (this.currentPage > 1) {
+                        this.currentPage--;
+                    } else {
+                        this.currentPage = 1;
+                    }
+                    this.fill();
+                },
+                goToNextPage() {//下一页
+                    //console.log("进入了：");
+                    if (this.currentPage == this.total) {
+                        this.currentPage == this.total;
+                    }
+                    else {
+                        this.currentPage++;
+                    }
+                    this.fill();
+                },
+                goToLastPage() {//尾页
+                    this.currentPage = this.total;
+                    this.fill();
+
+
+                },
+                jumpToPage() {//跳转
+                    const page = parseInt(this.jumpPage);
+                    if (page > this.total) {
+                        this.goToLastPage();
+                        this.jumpPage = '';
+                    } else if (page < 1) {
+                        this.goToFirstPage();
+                        this.jumpPage = '';
+                    } else {
+                        this.currentPage = page;
+                        this.fill();
+                        this.jumpPage = '';
+                    }
+                },
+
+            },
+            mounted: function () {
+                this.fill();
+            }
+        }
+        )
+    </script>
+</body>
+</html>
+

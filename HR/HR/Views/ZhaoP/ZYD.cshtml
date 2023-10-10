@@ -1,0 +1,402 @@
+﻿
+@{
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+    <link rel="stylesheet"
+          href="../../../css/table.css" type="text/css">
+    <link rel="stylesheet"
+          href="../../../css/cwcalendar.css" type="text/css">
+    <script type="text/javascript"
+            src="../../../javascript/comm/comm.js">
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/comm/list.js">
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/calendar-ch.js">
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/jquery-1.7.2.js">
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/locate.js">
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/select.js">
+    </script>
+
+    <script type="text/javascript">
+        window.onload = check;
+        function tick() {
+            var now = new Date();
+            var hours, minutes, seconds, noon;
+            var intHours, intMinutes, intSeconds;
+            intHours = now.getHours();
+            intMinutes = now.getMinutes();
+            intSeconds = now.getSeconds();
+            if (intHours < 24) {
+                hours = intHours + ":";
+                noon = "A.M.";
+            } else {
+                intHours = intHours - 24;
+                hours = intHours + ":";
+                noon = "P.M.";
+            }
+            if (intMinutes < 10) {
+                minutes = "0" + intMinutes + ":";
+            } else {
+                minutes = intMinutes + ":";
+            }
+            if (intSeconds < 10) {
+                seconds = "0" + intSeconds + " ";
+            } else {
+                seconds = intSeconds + " ";
+            }
+            timeString = hours + minutes + seconds;
+            var now = new Date();
+            document.getElementById("nowTime").value = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate() + " " + timeString;
+            window.setTimeout("tick();", 1000);
+        }
+
+        //load事件
+        function check() {
+            //获得系统当前时间的方法
+            tick();
+        }
+    </script>
+    <script type="text/javascript">
+        function mysubmit() {
+            document.getElementById('deadline').value = document
+                .getElementById('date_start').value;
+
+            if (document.getElementById("firstKindId").value == "") {
+                alert("请选择一级机构");
+                return;
+            }
+            if (document.getElementById("engageType").value == "") {
+                alert("请选择招聘类型");
+                return;
+            }
+            if (document.getElementById("majorKindId").value == "") {
+                alert("请选择职位分类");
+                return;
+            }
+            if (document.getElementById("majorId").value == "") {
+                alert("请选择职位名称");
+                return;
+            }
+            if (document.getElementById("humanAmount").value == "") {
+                alert("请填写招聘人数");
+                return;
+            }
+            if (document.getElementById("date_start").value == "") {
+                alert("请选择截止日期");
+                return;
+            }
+
+            document.humanfileForm.submit();
+        }
+
+
+    </script>
+
+    <script src="~/Scripts/vue/dist/vue.js"></script>
+    <script src="~/Scripts/element-ui/lib/index.js"></script>
+    <link href="~/Scripts/element-ui/lib/theme-chalk/index.css" rel="stylesheet" />
+    <script src="~/Scripts/axios/dist/axios.js"></script>
+    <style type="text/css">
+        .el-table tr {
+            background-color: #FFFFCC;
+        }
+    </style>
+
+</head>
+<body>
+    <div id="app">
+        <form name="humanfileForm" method="post" action="" >
+            <table width="100%">
+                <tr>
+                    <td>
+                        <font color="black">您正在做的业务是：人力资源--招聘管理--职位发布管理--职位发布登记 </font>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        <input type="button" value="提交" class="BUTTON_STYLE1" v-on:click="ti()">
+                        <input type="reset" value="清除" class="BUTTON_STYLE1" >
+                    </td>
+                </tr>
+            </table>
+            <table width="100%" border="1" cellpadding=0 cellspacing=1
+                   bordercolorlight=#848284 bordercolordark=#eeeeee
+                   class="TABLE_STYLE1">
+                <tr>
+                    <td class="TD_STYLE1" width="11%">
+                        I级机构
+                    </td>
+                    <td width="14%" class="TD_STYLE2">
+
+                        <select name="emajorRelease.firstKindId"  class="SELECT_STYLE1" v-on:change="hand()"  v-model="optionstyi" >
+                            <option v-for="option in optionyi">{{ option.first_kind_name }}</option>
+                        </select>
+                    </td>
+                    <td width="11%" class="TD_STYLE1">
+                        II级机构
+                    </td>
+                    <td width="14%" class="TD_STYLE2">
+                        <select name="emajorRelease.secondKindId"  class="SELECT_STYLE1" v-model="optionster" v-on:change="hander()" >
+                            <option v-for="option in optioner">{{ option.second_kind_name }}</option>
+                        </select>
+
+                    </td>
+                    <td width="11%" class="TD_STYLE1">
+                        III级机构
+                    </td>
+                    <td class="TD_STYLE2">
+                        <select name="emajorRelease.thirdKindId" id="thirdKindId" class="SELECT_STYLE1" v-model="optionstsa" >
+                            <option v-for="option in optionsa">{{ option.third_kind_name }}</option>
+                        </select>
+                    </td>
+                    <td width="11%" class="TD_STYLE1">
+                        招聘类型
+                    </td>
+                    <td class="TD_STYLE2" colspan="2">
+                        <select name="emajorRelease.engageType" class="SELECT_STYLE1" v-model="zplx">
+
+                            <option>校园招聘</option>
+
+                            <option>社会招聘</option>
+
+                        </select>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="TD_STYLE1">
+                        职位分类
+                    </td>
+                    <td class="TD_STYLE2">
+                        <select name="emajorRelease.majorKindId"  class="SELECT_STYLE1" v-on:change="handleMajorKindChange()" v-model="optionstfl" >
+                            <option v-for="option in optionsfl">{{ option.major_kind_name }}</option>
+                        </select>
+                    </td>
+                    <td class="TD_STYLE1">
+                        职位名称
+                    </td>
+                    <td class="TD_STYLE2">
+                        <select name="emajorRelease.majorId" id="majorId" class="SELECT_STYLE1" v-model="optionstmc" >
+                            <option v-for="option in optionsmc">{{ option.major_name }}</option>
+                        </select>
+                    </td>
+                    <td class="TD_STYLE1">
+                        招聘人数
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="emajorRelease.humanAmount" id="humanAmount" class="INPUT_STYLE2" v-model="rs" style="width:162px">
+                    </td>
+                    <td class="TD_STYLE1">
+                        截止日期
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="item.str_startTime" 
+                               class="INPUT_STYLE2"  v-model="jrq" style="width:162px">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="TD_STYLE1">
+                        登记人
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="emajorRelease.register" value="admin" class="INPUT_STYLE2" v-model="djr" style="width:162px">
+                    </td>
+                    <td class="TD_STYLE1">
+                        登记时间
+                    </td>
+                    <td class="TD_STYLE2">
+
+                        <input type="text" name="emajorRelease.registTime"
+                               id="nowTime" readonly="readonly"
+                               class="INPUT_STYLE2" v-model="djrq" style="width:162px">
+                    </td>
+
+                    <td>&nbsp; </td>
+                    <td>&nbsp; </td>
+                    <td>&nbsp; </td>
+                    <td>&nbsp; </td>
+
+                </tr>
+                <tr>
+                    <td class="TD_STYLE1">
+                        职位描述
+                    </td>
+                    <td class="TD_STYLE2" colspan="8">
+                        <textarea name="emajorRelease.majorDescribe" rows="4" cols="80" class="TEXTAREA_STYLE1" v-model="ms"></textarea>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td class="TD_STYLE1">
+                        招聘要求
+                    </td>
+                    <td class="TD_STYLE2" colspan="8">
+                        <textarea name="emajorRelease.engageRequired" rows="4" cols="80" class="TEXTAREA_STYLE1" v-model="yq"></textarea>
+                    </td>
+
+                </tr>
+            </table>
+        </form>
+    </div>
+
+    <script type="text/javascript">
+        var vm = new Vue({
+            el: "#app",
+            data() {
+                return {
+                    optionyi: [],
+                    optionstyi: "",
+                    optioner: [],
+                    optionster: "",
+                    optionsa: [],
+                    optionstsa: "",
+
+                    optionsfl: [],
+                    optionsmc:[],
+                    optionstfl: "",
+                    optionstmc: "",
+                    zplx: "",
+                    rs: "",
+                    jrq: "",
+                    djr: "",
+                    djrq: "",
+                    ms: "",
+                    yq:"",
+                }
+            },
+            methods: {
+                ti() {
+                   
+                    const selectedOption = this.optionyi.find(option => option.first_kind_name === this.optionstyi);
+                    const selectedOptions = this.optioner.find(option => option.second_kind_name === this.optionster);
+                    const selectedOptionss = this.optionsa.find(option => option.third_kind_name === this.optionstsa);
+                    const fl = this.optionsfl.find(option => option.major_kind_name === this.optionstfl);
+                    const mc = this.optionsmc.find(option => option.major_name === this.optionstmc);
+
+                    const datetimeValue = new Date(this.jrq);
+                    var formattedDateTime = datetimeValue.toISOString();
+
+                    var loginTime = document.getElementById("nowTime").value;
+                    
+                   // console.log("5：" + loginTime);
+                 
+
+
+
+                    axios.get("/ZhaoP/ZYDTJf", {
+                        params: {
+                            first_kind_id: selectedOption.first_kind_id,
+                            first_kind_name: selectedOption.first_kind_name,
+                            second_kind_id: selectedOptions.second_kind_id,
+                            second_kind_name: selectedOptions.second_kind_name,
+                            third_kind_id: selectedOptionss.third_kind_id,
+                            third_kind_name: selectedOptionss.third_kind_name,
+                            major_kind_id: fl.major_kind_id,
+                            major_kind_name: fl.major_kind_name,
+                            major_id: mc.major_id,
+                            major_name: mc.major_name,
+                            human_amount: this.rs,
+                            engage_type: this.zplx,
+                            deadline: formattedDateTime,
+                            register: this.djr,
+                            regist_time: loginTime,
+                            major_describe: this.ms,
+                            engage_required: this.yq
+                        }
+                    })
+                        .then(res => {
+                            if (res.data == "1") {
+                                location.href = 'ZYD';
+                            }
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                },
+                fill() {
+                    axios.get("/KeHu/Syzbw")
+                        .then(res => {
+                            this.optionyi = res.data;
+                            this.optioner = [];
+                            this.optionsa = [];
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                },
+                hand() {
+                    axios.get("/RL/JLCCXList?name=" + this.optionstyi)
+                        .then(res => {
+                            this.optioner = res.data;
+                            this.optionsa = [];
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                },
+                hander() {
+                    axios.get("/RL/JLCCXLister?name=" + this.optionster)
+                        .then(res => {
+                            this.optionsa = res.data;
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                },
+                fl() {
+                    axios.get("/KeHu/ZhiWeiCX")
+                        .then(res => {
+                            this.optionsfl = res.data;
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                },
+                mc() {
+                    axios.get("/KeHu/ZhiCengCX")
+                        .then(res => {
+                            this.optionsmc = res.data;
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                },
+                handleMajorKindChange() {
+                    //console.log(this.optionstfl);
+                    axios.get("/ZhaoP/JLCCXList?name=" + this.optionstfl)
+                        .then(res => {
+                            this.optionsmc = res.data;
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                },
+            },
+            mounted: function () {
+                this.fill();
+                this.fl();
+                this.mc();
+            }
+        })
+    </script>
+
+</body>
+</html>
+
+

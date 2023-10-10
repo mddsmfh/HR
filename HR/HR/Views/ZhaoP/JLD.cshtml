@@ -1,0 +1,724 @@
+﻿
+@{
+    Layout = null;
+}
+
+@using Model;
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet"
+          href="../../../css/table.css" type="text/css">
+    <link rel="stylesheet"
+          href="../../../css/cwcalendar.css" type="text/css">
+    <script type="text/javascript"
+            src="../../../javascript/comm/comm.js">
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/comm/list.js">
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/calendar-ch.js">
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/jquery-1.7.2.js">
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/locate.js">
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/select.js">
+    </script>
+    <script type="text/javascript">
+        window.onload = check;
+        function tick() {
+            var now = new Date();
+            var hours, minutes, seconds, noon;
+            var intHours, intMinutes, intSeconds;
+            intHours = now.getHours();
+            intMinutes = now.getMinutes();
+            intSeconds = now.getSeconds();
+            if (intHours < 24) {
+                hours = intHours + ":";
+                noon = "A.M.";
+            } else {
+                intHours = intHours - 24;
+                hours = intHours + ":";
+                noon = "P.M.";
+            }
+            if (intMinutes < 10) {
+                minutes = "0" + intMinutes + ":";
+            } else {
+                minutes = intMinutes + ":";
+            }
+            if (intSeconds < 10) {
+                seconds = "0" + intSeconds + " ";
+            } else {
+                seconds = intSeconds + " ";
+            }
+            timeString = hours + minutes + seconds;
+            var now = new Date();
+            document.getElementById("nowTime").value = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate() + " " + timeString;
+            window.setTimeout("tick();", 1000);
+        }
+
+        //load事件
+        function check() {
+            //获得系统当前时间的方法
+            tick();
+        }
+    </script>
+    <script type="text/javascript">
+        function mysubmit() {
+            if (document.getElementById("name").value == "") {
+                alert("请填写姓名");
+                return false;
+            }
+            if (document.getElementById("phone").value == "") {
+                alert("请填写电话");
+                return false;
+            } else if (isNaN(document.getElementById("phone").value)) {
+                alert("电话号码请填写数字");
+                return false;
+            }
+            if (document.getElementById("card").value == "") {
+                alert("请填写身份证号码");
+                return false;
+            }
+            if (document.getElementById("birthday").value != "") {
+                var str = document.getElementById("birthday").value;
+                var r = str.match(/^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2})$/);
+                if (r == null) {
+                    alert("请输入正确的日期格式：yyyy-MM-dd");
+                    return false;
+                }
+            }
+            if (document.getElementById("email").value != "") {
+                var email = document.getElementById("email").value;
+                if (email.indexOf(".") <= -1 || email.indexOf("@@") <= -1) {
+                    alert("Email格式不匹配，如：123@@.com");
+                    return false;
+                }
+            }
+            if (document.getElementById("humanHomephone").value != "") {
+                if (isNaN(document.getElementById("humanHomephone").value)) {
+                    alert("家庭电话请填写数字");
+                    return false;
+                }
+            }
+            if (document.getElementById("humanMobilephone").value != "") {
+                if (isNaN(document.getElementById("humanMobilephone").value)) {
+                    alert("手机请填写数字");
+                    return false;
+                }
+            }
+            if (document.getElementById("humanAge").value != "") {
+                if (isNaN(document.getElementById("humanAge").value)) {
+                    alert("年龄请填写数字");
+                    return false;
+                }
+            }
+            if (document.getElementById("demandSalaryStandard").value != "") {
+                if (isNaN(document.getElementById("demandSalaryStandard").value)) {
+                    alert("年龄请填写数字");
+                    return false;
+                }
+            }
+            document.fm.submit();
+        }
+    </script>
+
+    <script src="~/Scripts/vue/dist/vue.js"></script>
+    <script src="~/Scripts/element-ui/lib/index.js"></script>
+    <link href="~/Scripts/element-ui/lib/theme-chalk/index.css" rel="stylesheet" />
+    <script src="~/Scripts/axios/dist/axios.js"></script>
+    <style type="text/css">
+        .el-table tr {
+            background-color: #FFFFCC;
+        }
+    </style>
+
+</head>
+<body>
+    @{Major_release major_Release = ViewBag.s; }
+    <div id="app">
+        <form id="recruitAction!saveEngageResume" name="fm" action="" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="engageResume.passCheckcomment" value="不通过" />
+            <input type="hidden" name="engageResume.passPasscomment" value="不通过" />
+            <input type="hidden" name="engageResume.checkStatus" value="false" />
+            <table width="100%">
+                <tr>
+                    <td>
+                        <font color="black">您正在做的业务是：人力资源--招聘管理--简历管理--简历登记 </font>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+
+                        <input type="button" value="提交" class="BUTTON_STYLE1" v-on:click="ti()">
+                        <input type="reset" value="清除" class="BUTTON_STYLE1">
+                    </td>
+                </tr>
+            </table>
+            <table width="100%" border="1" cellpadding=0 cellspacing=1
+                   bordercolorlight=#848284 bordercolordark=#eeeeee
+                   class="TABLE_STYLE1">
+                <tr>
+                    <td class="TD_STYLE1">
+                        职位分类
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="hidden" value="01" id="humanMajorKindId" name="engageResume.humanMajorKindId" />
+                
+                        <select name="engageResume.humanMajorKindName" class="SELECT_STYLE1" v-on:change="handleMajorKindChange()" v-model="optionstfl">
+                            <option v-for="option in optionsfl">{{ option.major_kind_name }}</option>
+                        </select>
+                    </td>
+                    <td class="TD_STYLE1">
+                        职位名称
+                    </td>
+                    <td class="TD_STYLE2" width="20%">
+
+                        <input type="hidden" value="02" name="engageResume.humanMajorId" />
+                        <select name="engageResume.humanMajorName" class="SELECT_STYLE1" v-model="optionstmc">
+                            <option v-for="option in optionsmc">{{ option.major_name }}</option>
+                        </select>
+                    </td>
+                    <td width="11%" class="TD_STYLE1">
+                        招聘类型
+                    </td>
+                    <td class="TD_STYLE2" colspan="2">
+                        <select name="engageResume.engageType" class="SELECT_STYLE1" v-model="zp">
+                            <option>校园招聘</option>
+                            <option>社会招聘</option>
+                        </select>
+                    </td>
+                    <td rowspan="6" align="center">
+                        <el-upload class="avatar-uploader"
+                                   action="/ZhaoP/WSCD"
+                                   :show-file-list="false"
+                                   :on-success="handleAvatarSuccess"
+                                   :before-upload="beforeAvatarUpload">
+                            <img style="width:150px;height:90px" v-if="imageUrl" :src="imageUrl" class="avatar">
+                            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                        </el-upload>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="TD_STYLE1">
+                        姓名
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" v-model="xm" style="width:163px" name="engageResume.humanName" id="name" class="INPUT_STYLE2" />
+                    </td>
+                    <td class="TD_STYLE1">
+                        性别
+                    </td>
+                    <td class="TD_STYLE2">
+                        <select v-model="xb" name="engageResume.humanSex" class="SELECT_STYLE1">
+                            <option>男</option>
+                            <option>女</option>
+                        </select>
+                    </td>
+                    <td class="TD_STYLE1">
+                        EMAIL
+                    </td>
+                    <td colspan="2" class="TD_STYLE2">
+                        <input type="text" v-model="email" name="engageResume.humanEmail" id="email" class="INPUT_STYLE2">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="TD_STYLE1">
+                        电话
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" v-model="dh" style="width:163px" name="engageResume.humanTelephone" id="phone" class="INPUT_STYLE2">
+                    </td>
+                    <td class="TD_STYLE1">
+                        家庭电话
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" v-model="jdh" name="engageResume.humanHomephone" id="humanHomephone" class="INPUT_STYLE2" style="width:237px">
+                    </td>
+                    <td class="TD_STYLE1">
+                        手机
+                    </td>
+                    <td colspan="2" class="TD_STYLE2">
+                        <input type="text" v-model="sj" name="engageResume.humanMobilephone" id="humanMobilephone" class="INPUT_STYLE2">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="TD_STYLE1">
+                        住址
+                    </td>
+                    <td colspan="3" class="TD_STYLE2">
+                        <input type="text" v-model="dz" name="engageResume.humanAddress" value="" class="INPUT_STYLE2">
+                    </td>
+
+                    <td class="TD_STYLE1">
+                        邮编
+                    </td>
+                    <td colspan="2" class="TD_STYLE2">
+                        <input type="text" v-model="yb" name="engageResume.humanPostcode" value="" class="INPUT_STYLE2">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="TD_STYLE1">
+                        国籍
+                    </td>
+                    <td class="TD_STYLE2">
+                        <select name="engageResume.humanNationality" class="SELECT_STYLE1" v-model="optionstgj">
+                            <option v-for="option in optionsgj">{{ option.attribute_name }}</option>
+                        </select>
+                    </td>
+                    <td class="TD_STYLE1">
+                        出生地
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="engageResume.humanBirthplace" v-model="csd" class="INPUT_STYLE2" style="width:237px">
+                    </td>
+                    <td class="TD_STYLE1">
+                        生日
+                    </td>
+                    <td width="13%" colspan="2" class="TD_STYLE2">
+                        <input type="text" v-model="sr" name="engageResume.humanBirthday" id="birthday" class="INPUT_STYLE2">
+                    </td>
+
+
+                </tr>
+                <tr>
+                    <td width="11%" class="TD_STYLE1">
+                        民族
+                    </td>
+                    <td class="TD_STYLE2" width="14%">
+                        <select name="engageResume.humanRace" class="SELECT_STYLE1" v-model="optionstmz">
+                            <option v-for="option in optionsmz">{{ option.attribute_name }}</option>
+                        </select>
+                    </td>
+                    <td class="TD_STYLE1">
+                        宗教信仰
+                    </td>
+                    <td class="TD_STYLE2">
+                        <select name="engageResume.humanReligion" class="SELECT_STYLE1" v-model="optionstzjxy">
+                            <option v-for="option in optionszjxy">{{ option.attribute_name }}</option>
+                        </select>
+                    </td>
+                    <td class="TD_STYLE1">
+                        政治面貌
+                    </td>
+                    <td class="TD_STYLE2" colspan="2">
+                        <select name="engageResume.humanParty" class="SELECT_STYLE1" v-model="optionstzm">
+                            <option v-for="option in optionszm">{{ option.attribute_name }}</option>
+                        </select>
+                    </td>
+
+
+                </tr>
+                <tr>
+                    <td class="TD_STYLE1">
+                        身份证号码
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" v-model="idc" name="engageResume.humanIdcard" style="width:163px" id="card" class="INPUT_STYLE2">
+                    </td>
+                    <td class="TD_STYLE1">
+                        年龄
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" v-model="nl" style="width:237px" name="engageResume.humanAge" id="humanAge" class="INPUT_STYLE2"  >
+                    </td>
+                    <td class="TD_STYLE1">
+                        毕业院校
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" v-model="byyx" name="engageResume.humanCollege" class="INPUT_STYLE2" style="width:111px"/>
+                    </td>
+
+                    <td class="TD_STYLE1">
+                        学历
+                    </td>
+                    <td class="TD_STYLE2">
+                        <select name="engageResume.humanEducatedDegree" class="SELECT_STYLE1" v-model="optionstxl">
+                            <option v-for="option in optionsxl">{{ option.attribute_name }}</option>
+                        </select>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td class="TD_STYLE1">
+                        教育年限
+                    </td>
+                    <td class="TD_STYLE2">
+                        <select name="engageResume.humanEducatedYears" class="SELECT_STYLE1" v-model="optionstnx">
+                            <option v-for="option in optionsnx">{{ option.attribute_name }}</option>
+                        </select>
+                    </td>
+                    <td class="TD_STYLE1">
+                        学历专业
+                    </td>
+                    <td class="TD_STYLE2">
+                        <select name="engageResume.humanEducatedMajor" class="SELECT_STYLE1" v-model="optionstzy">
+                            <option v-for="option in optionszy">{{ option.attribute_name }}</option>
+                        </select>
+                    </td>
+
+                    <td class="TD_STYLE1">
+                        薪酬要求
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" v-model="xc" style="width:111px" name="engageResume.demandSalaryStandard" id="demandSalaryStandard" class="INPUT_STYLE2" />
+                    </td>
+                    <td class="TD_STYLE1">
+                        注册时间
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="engageResume.registTime"
+                               id="nowTime" readonly="readonly"
+                               class="INPUT_STYLE2">
+                    </td>
+
+                </tr>
+                <tr>
+
+                    <td class="TD_STYLE1">
+                        特长
+                    </td>
+                    <td class="TD_STYLE2">
+                        <select name="engageResume.humanSpecility" class="SELECT_STYLE1" v-model="optionsttc">
+                            <option v-for="option in optionstc">{{ option.attribute_name }}</option>
+                        </select>
+                    </td>
+                    <td class="TD_STYLE1">
+                        爱好
+                    </td>
+                    <td class="TD_STYLE2">
+                        <select name="engageResume.humanHobby" class="SELECT_STYLE1" v-model="optionstah">
+                            <option v-for="option in optionsah">{{ option.attribute_name }}</option>
+                        </select>
+                    </td>
+                    <td class="TD_STYLE1">
+                        &nbsp;
+                    </td>
+                    <td class="TD_STYLE2">
+                        &nbsp;
+                    </td>
+                    <td class="TD_STYLE1">
+                        &nbsp;
+                    </td>
+                    <td class="TD_STYLE2">
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td class="TD_STYLE1">
+                        个人履历
+                    </td>
+                    <td colspan="7" class="TD_STYLE2">
+                        <textarea v-model="lul" name="engageResume.humanHistoryRecords" rows="4" class="TEXTAREA_STYLE1"></textarea>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="TD_STYLE1">
+                        备注
+                    </td>
+                    <td colspan="7" class="TD_STYLE2">
+                        <textarea name="engageResume.remark" rows="4" v-model="bz" class="TEXTAREA_STYLE1"></textarea>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+
+    <script type="text/javascript">
+        var vm = new Vue({
+            el: "#app",
+            data() {
+                return {
+                    optionsfl: [],
+                    optionsmc: [],
+                    optionsgj: [],
+                    optionsmz: [],
+                    optionszjxy: [],
+
+                   
+                    optionszm: [],
+                    optionsxl: [],
+                    optionsnx: [],
+                    optionszy: [],
+                    optionstc: [],
+                    optionsah: [],
+                    optionstfl: [],
+                    optionstmc: [],
+
+                    optionstgj: "",
+                    optionstmz: "",
+                    optionstzjxy: "",
+                    optionstzm: "",
+                    optionstxl: "",
+                    optionstnx: "",
+                    optionstzy: "",
+                    optionsttc: "",
+                    optionstah: "",
+
+                    zp: "",
+                    xm: "",
+                    xb: "",
+                    email: "",
+                    dh: "",
+                    jdh: "",
+                    sj: "",
+                    dz: "",
+                    yb: "",
+                    csd: "",
+                    sr: "",
+                    idc: "",
+                    nl: "",
+                    byyx: "",
+                    xc: "",
+                    lul: "",
+                    bz:"",
+
+                    imageUrl: '',
+                    ima: "",
+
+                }
+            },
+            methods: {
+                ah() {
+                    var name = "爱好"
+                    axios.get("/ZhaoP/JLDCXList?name=" + name)
+                        .then(res => {
+                            this.optionsah = res.data;
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                },
+                tc() {
+                    var name = "特长"
+                    axios.get("/ZhaoP/JLDCXList?name=" + name)
+                        .then(res => {
+                            this.optionstc = res.data;
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                },
+                zy() {
+                    var name = "专业"
+                    axios.get("/ZhaoP/JLDCXList?name=" + name)
+                        .then(res => {
+                            this.optionszy = res.data;
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                },
+                nx() {
+                    var name = "教育年限"
+                    axios.get("/ZhaoP/JLDCXList?name=" + name)
+                        .then(res => {
+                            this.optionsnx = res.data;
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                },
+                xl() {
+                    var name = "学历"
+                    axios.get("/ZhaoP/JLDCXList?name=" + name)
+                        .then(res => {
+                            this.optionsxl = res.data;
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                },
+                zm() {
+                    var name = "政治面貌"
+                    axios.get("/ZhaoP/JLDCXList?name=" + name)
+                        .then(res => {
+                            this.optionszm = res.data;
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                },
+                zjxy() {
+                    var name = "宗教信仰"
+                    axios.get("/ZhaoP/JLDCXList?name=" + name)
+                        .then(res => {
+                            this.optionszjxy = res.data;
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                },
+                mz() {
+                    var name = "民族"
+                    axios.get("/ZhaoP/JLDCXList?name=" + name)
+                        .then(res => {
+                            this.optionsmz = res.data;
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                },
+                gj() {
+                    var name = "国籍"
+                    axios.get("/ZhaoP/JLDCXList?name=" + name)
+                        .then(res => {
+                            this.optionsgj = res.data;
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                },
+                lx() {
+                    var queryString = window.location.search;
+
+                    // 解析查询字符串，获取参数值
+                    var params = new URLSearchParams(queryString);
+                    var engageType = params.get('engage_type');
+                    var majorKindName = params.get('major_kind_name');
+                    var majorName = params.get('major_name');
+                    this.zp = engageType;
+                    this.optionstfl = majorKindName;
+                    this.optionstmc =majorName;
+
+    },
+    ti() {
+
+        const fl = this.optionsfl.find(option => option.major_kind_name === this.optionstfl);
+        const mc = this.optionsmc.find(option => option.major_name === this.optionstmc);        
+
+        const gj = this.optionsgj.find(option => option.attribute_name === this.optionstgj);
+        const mz = this.optionsmz.find(option => option.attribute_name === this.optionstmz);
+        const zjxy = this.optionszjxy.find(option => option.attribute_name === this.optionstzjxy);
+        const zm = this.optionszm.find(option => option.attribute_name === this.optionstzm);
+        const xl = this.optionsxl.find(option => option.attribute_name === this.optionstxl);
+        const nx = this.optionsnx.find(option => option.attribute_name === this.optionstnx);
+        const zy = this.optionszy.find(option => option.attribute_name === this.optionstzy);
+        const tc = this.optionstc.find(option => option.attribute_name === this.optionsttc);
+        const ah = this.optionsah.find(option => option.attribute_name === this.optionstah);
+
+        const datetimeValue = new Date(this.sr);
+        var formattedDateTime = datetimeValue.toISOString();
+
+        var loginTime = document.getElementById("nowTime").value;
+
+
+
+        axios.get("/ZhaoP/JLDTJf", {
+            params: {
+                human_major_kind_id: fl.major_kind_id,//职位分类编号
+                human_major_kind_name: fl.major_kind_name, //职位分类名称
+                human_major_id: mc.major_id, //职位编号
+                human_major_name: mc.major_name, //职位名称
+                engage_type: this.zp,    //招聘类型
+                human_name: this.xm, //姓名
+                human_sex: this.xb, //性别
+                human_email: this.email,  //email
+                human_telephone: this.dh,  //电话号码
+                human_homephone: this.jdh,  //家庭电话
+                human_mobilephone: this.sj,       //手机
+                human_address: this.dz,       //地址
+                human_postcode: this.yb,     //邮编
+                human_nationality: gj.attribute_name,    //国籍
+                human_birthplace: this.csd,   //出生地
+                human_birthday: formattedDateTime,      //出生日期
+                human_race: mz.attribute_name,          //民族
+                human_religion: zjxy.attribute_name,            //宗教信仰
+                human_party: zm.attribute_name,                   //政治面貌
+                human_idcard: this.idc,                  //身份证号
+                human_age: this.nl,             //年龄
+                human_college: this.byyx,         //毕业院校
+                human_educated_degree: xl.attribute_name,     //学历
+                human_educated_years: nx.attribute_name,      //教育年限
+                human_educated_major: zy.attribute_name,      //学历专业
+                demand_salary_standard: this.xc,        //薪酬标准
+                regist_time: loginTime,                 //注册时间
+                register:'zhangsan',                      //登录人
+                human_specility: tc.attribute_name,   //特长
+                human_hobby: ah.attribute_name,       //爱好
+                human_history_records: this.lul,      //个人履历
+                remark: this.bz,                //备注
+                checker: this.xm,
+                check_time: loginTime,
+                human_picture: this.ima     //图片
+            }
+        })
+            .then(res => {
+                if (res.data == "1") {
+                    location.href = 'JLD';
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    },
+    fl() {
+        axios.get("/KeHu/ZhiWeiCX")
+            .then(res => {
+                this.optionsfl = res.data;
+            })
+            .catch(err => {
+                console.log(err);
+            })
+                },
+      mc() {
+          axios.get("/KeHu/ZhiCengCX")
+              .then(res => {
+                  this.optionsmc = res.data;
+              })
+              .catch(err => {
+                  console.log(err);
+              })
+      },
+     handleMajorKindChange() {
+        //console.log(this.optionstfl);
+         axios.get("/ZhaoP/JLCCXList?name=" + this.optionstfl)
+             .then(res => {
+                 this.optionsmc = res.data;
+             })
+             .catch(err => {
+                 console.log(err);
+             })
+     },
+      handleAvatarSuccess(res, file) {
+          this.imageUrl = URL.createObjectURL(file.raw);
+          this.ima = res.path;
+    
+    
+      },
+      beforeAvatarUpload(file) {
+    
+      }
+},
+mounted: function () {
+    this.fl();
+    this.lx();
+    this.gj();
+    this.mz();
+    this.zjxy();
+    this.zm();
+    this.xl();
+    this.nx();
+    this.zy();
+    this.tc();
+    this.ah();
+    this.mc();
+}
+})
+    </script>
+
+
+</body>
+</html>
+
+

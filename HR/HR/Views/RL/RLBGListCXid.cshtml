@@ -1,0 +1,723 @@
+﻿
+@{
+    Layout = null;
+}
+
+@using Model;
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-trasitional.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet"
+          href="../../css/table.css" type="text/css">
+    <link rel="stylesheet"
+          href="../../css/cwcalendar.css" type="text/css">
+    <script type="text/javascript"
+            src="../../javascript/comm/comm.js">
+    </script>
+    <script language="javascript"
+            src="../../javascript/winopen/winopenm.js">
+    </script>
+    <script type="text/javascript"
+            src="../../javascript/calendar-ch.js">
+    </script>
+    <script type="text/javascript"
+            src="../../javascript/jquery-1.7.2.js">
+    </script>
+    <script type="text/javascript"
+            src="../../javascript/jquery.messager.js">
+    </script>
+    <script src="../../javascript/time.js"></script>
+    <script type="text/javascript"
+            src="../../javascript/human_check.js">
+    </script>
+    <script type="text/javascript"
+            src="../../javascript/human_input_check.js">
+    </script>
+
+    <script src="~/Scripts/vue/dist/vue.js"></script>
+    <script src="~/Scripts/element-ui/lib/index.js"></script>
+    <link href="~/Scripts/element-ui/lib/theme-chalk/index.css" rel="stylesheet" />
+    <script src="~/Scripts/axios/dist/axios.js"></script>
+</head>
+<body>
+    @{Human_file human = ViewBag.s; }
+    <div id="app">
+        <form action="" method="post" enctype="multipart/form-data">
+            <table width="100%">
+                <tr>
+                    <td>
+                        <font color="black">
+                            您正在做的业务是：人力资源--人力资源档案管理--人力资源档案变更
+                        </font>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        <input type="button" value="确认变更" class="BUTTON_STYLE1" v-on:click="fhtg()" />
+                        <input type="reset" value="清除" class="BUTTON_STYLE1">
+                        <input type="button" value="返回" class="BUTTON_STYLE1"
+                               onclick="history.back()">
+                    </td>
+                </tr>
+            </table>
+            <table width="100%" border="1" cellpadding=3 cellspacing=1
+                   bordercolorlight=#848284 bordercolordark=#eeeeee
+                   class="TABLE_STYLE1">
+                <tr>
+                    <td class="TD_STYLE1" width="10%">
+                        档案编号
+                    </td>
+                    <td colspan="6" class="TD_STYLE2">
+                        {{jlbh}}
+                    </td>
+                    <td rowspan="6" width="13%" style="text-align: center;">
+                        <el-upload class="avatar-uploader"
+                                   action="/ZhaoP/WSCD"
+                                   :show-file-list="false"
+                                   :on-success="handleAvatarSuccess"
+                                   :before-upload="beforeAvatarUpload">
+                            <img style="width:150px;height:90px" v-if="imageUrl" :src="imageUrl" class="avatar">
+                        </el-upload>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="TD_STYLE1" width="10%">
+                        I级机构
+                    </td>
+                    <td width="13%" class="TD_STYLE2">
+                        {{yi}}
+                    </td>
+                    <td width="10%" class="TD_STYLE1">
+                        II级机构
+                    </td>
+                    <td width="13%" class="TD_STYLE2">
+                        {{er}}
+                    </td>
+                    <td width="10%" class="TD_STYLE1">
+                        III级机构
+                    </td>
+                    <td class="TD_STYLE2" colspan="2" width="2%">
+                        {{sa}}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="TD_STYLE1">
+                        职位分类
+                    </td>
+                    <td class="TD_STYLE2">
+                        {{fl}}
+                    </td>
+                    <td class="TD_STYLE1">
+                        职位名称
+                    </td>
+                    <td class="TD_STYLE2">
+                        {{mc}}
+                    </td>
+                    <td class="TD_STYLE1">
+                        职称
+                    </td>
+                    <td colspan="2" class="TD_STYLE2">
+                        <select name="engageResume.humanEducatedDegree" class="SELECT_STYLE1" v-model="optionstjc">
+                            <option v-for="option in optionsjc">{{ option.attribute_name }}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="TD_STYLE1">
+                        姓名
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" id="humanName" name="humanFile.humanName" v-model="xm" readonly="readonly"
+                               class="INPUT_STYLE2">
+                    </td>
+                    <td class="TD_STYLE1">
+                        性别
+                    </td>
+                    <td class="TD_STYLE2">
+                        <select class="SELECT_STYLE1" v-model="xb">
+                            <option>男</option>
+                            <option>女</option>
+                        </select>
+                    </td>
+                    <td class="TD_STYLE1">
+                        EMAIL
+                    </td>
+                    <td colspan="2" class="TD_STYLE2">
+                        <input type="text" name="humanFile.humanEmail" v-model="emal"
+                               class="INPUT_STYLE2" id="humanEmail">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="TD_STYLE1">
+                        电话
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="humanFile.humanTelephone" v-model="dh"
+                               class="INPUT_STYLE2" id="humanTelephone">
+                    </td>
+                    <td class="TD_STYLE1">
+                        QQ
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="humanFile.humanQq" v-model="qq"
+                               class="INPUT_STYLE2" id="humanQq">
+                    </td>
+                    <td class="TD_STYLE1">
+                        手机
+                    </td>
+                    <td colspan="2" class="TD_STYLE2">
+                        <input type="text" name="humanFile.humanMobilephone" id="humanMobilephone"
+                               v-model="sj" class="INPUT_STYLE2">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="TD_STYLE1">
+                        住址
+                    </td>
+                    <td colspan="3" class="TD_STYLE2">
+                        <input type="text" name="humanFile.humanAddress" v-model="dz"
+                               class="INPUT_STYLE2">
+                    </td>
+                    <td class="TD_STYLE1">
+                        邮编
+                    </td>
+                    <td colspan="2" class="TD_STYLE2">
+                        <input type="text" name="humanFile.humanPostcode" v-model="yb1"
+                               class="INPUT_STYLE2">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="TD_STYLE1">
+                        国籍
+                    </td>
+                    <td class="TD_STYLE2">
+                        <select name="humanFile.humanNationality" class="SELECT_STYLE1" v-model="gj">
+                            <option v-for="option in optionsgj">{{ option.attribute_name }}</option>
+                        </select>
+                    </td>
+                    <td class="TD_STYLE1">
+                        出生地
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="humanFile.humanBirthplace" v-model="csd"
+                               class="INPUT_STYLE2">
+                    </td>
+                    <td class="TD_STYLE1">
+                        生日
+                    </td>
+                    <td width="13%" class="TD_STYLE2">
+                        <input type="text" name="humanFile.humanBirthday" readonly="readonly"
+                               v-model="sr" class="INPUT_STYLE2" id="birthday">
+                    </td>
+                    <td width="10%" class="TD_STYLE1">
+                        民族
+                    </td>
+                    <td class="TD_STYLE2">
+                        <select name="humanFile.humanRace" class="SELECT_STYLE1" v-model="mz">
+                            <option v-for="option in optionsmz">{{ option.attribute_name }}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="TD_STYLE1">
+                        宗教信仰
+                    </td>
+                    <td class="TD_STYLE2">
+                        <select name="humanFile.humanReligion" class="SELECT_STYLE1" v-model="zjxy">
+                            <option v-for="option in optionszjxy">{{ option.attribute_name }}</option>
+                        </select>
+                    </td>
+                    <td class="TD_STYLE1">
+                        政治面貌
+                    </td>
+                    <td class="TD_STYLE2">
+                        <select name="humanFile.humanParty" class="SELECT_STYLE1" v-model="zm">
+                            <option v-for="option in optionszm">{{ option.attribute_name }}</option>
+                        </select>
+                    </td>
+                    <td class="TD_STYLE1">
+                        身份证号码
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="humanFile.humanIdCard" 
+                               v-model="idc" class="INPUT_STYLE2">
+                    </td>
+                    <td class="TD_STYLE1">
+                        社会保障号码
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="humanFile.humanSocietySecurityId" v-model="sh"
+                               class="INPUT_STYLE2">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="TD_STYLE1">
+                        年龄
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="humanFile.humanAge" v-model="nl"
+                               class="INPUT_STYLE2" id="humanAge">
+                    </td>
+                    <td class="TD_STYLE1">
+                        学历
+                    </td>
+                    <td class="TD_STYLE2">
+                        <select name="humanFile.humanEducatedDegree" class="SELECT_STYLE1" v-model="xl">
+                            <option v-for="option in optionsxl">{{ option.attribute_name }}</option>
+                        </select>
+                    </td>
+                    <td class="TD_STYLE1">
+                        教育年限
+                    </td>
+                    <td class="TD_STYLE2">
+                        <select name="humanFile.humanEducatedYears" class="SELECT_STYLE1" v-model="nx">
+                            <option v-for="option in optionsnx">{{ option.attribute_name }}</option>
+                        </select>
+                    </td>
+                    <td class="TD_STYLE1">
+                        学历专业
+                    </td>
+                    <td class="TD_STYLE2">
+                        <select name="humanFile.humanEducatedMajor" class="SELECT_STYLE1" v-model="zy">
+                            <option v-for="option in optionszy">{{ option.attribute_name }}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="TD_STYLE1">
+                        薪酬标准
+                    </td>
+                    <td class="TD_STYLE2">
+                        <select name="humanFile.salaryStandardId" class="SELECT_STYLE1" v-model="xc">
+                            <option>薪酬标准1</option>
+                            <option>薪酬标准2</option>
+                        </select>
+                    </td>
+                    <td class="TD_STYLE1">
+                        开户行
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="humanFile.humanBank" v-model="khx"
+                               class="INPUT_STYLE2">
+                    </td>
+                    <td class="TD_STYLE1">
+                        帐号
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="humanFile.humanAccount"
+                               v-model="zhah" class="INPUT_STYLE2">
+                    </td>
+                    <td class="TD_STYLE1">
+                        复核人
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="humanFile.checker" v-model="fhr"
+                               readonly="readonly" class="INPUT_STYLE2">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="TD_STYLE1">
+                        复核时间
+                    </td>
+                    <td class="TD_STYLE2">
+                        <input type="text" name="humanFile.checkTime"
+                               id="create_time" readonly="readonly"
+                               class="INPUT_STYLE2">
+                    </td>
+                    <td class="TD_STYLE1">
+                        特长
+                    </td>
+                    <td class="TD_STYLE2">
+                        <select name="humanFile.humanSpeciality" class="SELECT_STYLE1" v-model="tc">
+                            <option v-for="option in optionstc">{{ option.attribute_name }}</option>
+                        </select>
+                    </td>
+                    <td class="TD_STYLE1">
+                        爱好
+                    </td>
+                    <td class="TD_STYLE2">
+                        <select name="humanFile.humanHobby" class="SELECT_STYLE1" v-model="ah">
+                            <option v-for="option in optionsah">{{ option.attribute_name }}</option>
+                        </select>
+                    </td>
+                    <td class="TD_STYLE1">
+                        &nbsp;
+                    </td>
+                    <td class="TD_STYLE2">
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td class="TD_STYLE1">
+                        档案附件
+                    </td>
+                    <td colspan="7" class="TD_STYLE2">
+                        <a href="javascript:winopenm('query.jsp?filename=')">a.doc</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="TD_STYLE1">
+                        个人履历
+                    </td>
+                    <td colspan="7" class="TD_STYLE2">
+                        <textarea name="humanFile.humanHistroyRecords" rows="4"
+                                  class="TEXTAREA_STYLE1" v-model="lul"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="TD_STYLE1">
+                        家庭关系信息
+                    </td>
+                    <td colspan="7" class="TD_STYLE2">
+                        <textarea name="humanFile.humanFamilyMembership" rows="4"
+                                  class="TEXTAREA_STYLE1" v-model="gx"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="TD_STYLE1">
+                        备注
+                    </td>
+                    <td colspan="7" class="TD_STYLE2">
+                        <textarea name="humanFile.remark" rows="4" class="TEXTAREA_STYLE1" v-model="bz"></textarea>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+
+    <script type="text/javascript">
+        var vm = new Vue({
+            el: "#app",
+            data() {
+                return {
+                    optionsgj: [],
+                    optionsmz: [],
+                    optionszjxy: [],
+
+
+                    optionszm: [],
+                    optionsxl: [],
+                    optionsnx: [],
+                    optionszy: [],
+                    optionstc: [],
+                    optionsah: [],
+
+
+                    optionstgj: "",
+                    optionstmz: "",
+                    optionstzjxy: "",
+                    optionstzm: "",
+                    optionstxl: "",
+                    optionstnx: "",
+                    optionstzy: "",
+                    optionsttc: "",
+                    optionstah: "",
+
+                    optionsjc:[],
+                    optionstjc: "",
+                    yi: "",
+                    er: "",
+                    sa:"",
+
+                    gx:"",
+                    shid:"",
+                    djr: "",
+                    djsj:"",
+                    jlbh:"",
+                    fl: "",
+                    mc: "",
+                    lx: "",
+                    xm: "",
+                    xb: "",
+                    emal: "",
+                    dh: "",
+                    jdh: "",
+                    sj: "",
+                    dz: "",
+                    yb1: "",
+                    gj: "",
+                    csd: "",
+                    sr: "",
+                    mz: "",
+                    zjxy: "",
+                    zm: "",
+                    idc: "",
+                    nl: "",
+                    by: "",
+                    xl: "",
+                    nx: "",
+                    zy: "",
+                    xc: "",
+                    zcsj: "",
+                    tc: "",
+                    ah: "",
+                    tjr: "",
+                    tjsj: "",
+                    lul: "",
+                    bz: "",
+                    yj: "",
+                    qq: "",
+                    xc: "",
+                    khx: "",
+                    zhah: "",
+                    sh: "",
+                    fhr: "",
+                    bid:"",
+
+
+                    imageUrl: '',
+                    ima: "",
+
+
+                }
+            },
+            methods: {
+                fhtg() {
+                 
+/*                    var loginTime = document.getElementById("create_time").value;*/
+                    axios.get("/RL/RLBGXiuF", {
+                        params: {
+                             human_pro_designation: this.optionstjc,
+                             human_name:this.xm,
+                            human_sex: this.xb,
+                            human_email: this.emal,
+                             human_telephone:this.dh,
+                             human_qq:this.qq,
+                             human_mobilephone:this.sj, 
+                            human_address: this.dz,
+                            human_postcode: this.yb1,
+                            human_nationality: this.gj,
+                             human_birthplace:this.csd, 
+                            human_birthday: this.sr,
+                            human_race: this.mz,
+                            human_religion: this.zjxy,
+                            human_party: this.zm,
+                            human_id_card: this.idc,
+                             human_society_security_id:this.sh, 
+                             human_age:this.nl,
+                             human_educated_degree:this.xl,
+                             human_educated_years:this.nx, 
+                             human_educated_major:this.zy, 
+                            salary_standard_name: this.xc,
+                            human_bank: this.khx,
+                            human_account: this.zhah,
+                             human_speciality:this.tc,
+                            human_hobby: this.ah,
+                            human_histroy_records: this.lul,
+                             human_family_membership:this.gx,
+                             remark:this.bz,
+                            huf_id: this.bid
+                        }
+                    })
+                        .then(res => {
+                            if (res.data == "1") {
+                                location.href = 'RLBG';
+                            }
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                },
+                find() {
+                     this.bid = @Html.Raw(Json.Encode(human.huf_id));
+                    this.djr = @Html.Raw(Json.Encode(human.register));
+
+                     var dj = @Html.Raw(Json.Encode(human.regist_time));
+                    const isoDates = dj; // ISO 格式的日期时间
+                    const dates = new Date(parseInt(isoDates.substr(6))); // 解析 Microsoft JSON 日期格式
+                    const formattedDateTimes = dates.toLocaleString(); // 转换为本地格式  2023/8/30 16:44:21
+                    this.djsj = formattedDateTimes; // 更新日期时间字段的值
+
+                    this.jlbh= @Html.Raw(Json.Encode(human.human_id));
+
+                    this.yi = @Html.Raw(Json.Encode(human.first_kind_name));
+                    this.er = @Html.Raw(Json.Encode(human.second_kind_name));
+                    this.sa= @Html.Raw(Json.Encode(human.third_kind_name));
+
+                    this.fl = @Html.Raw(Json.Encode(human.human_major_kind_name));
+                    this.mc = @Html.Raw(Json.Encode(human.hunma_major_name));
+
+                    this.optionstjc =@Html.Raw(Json.Encode(human.human_pro_designation));
+
+                    this.xm = @Html.Raw(Json.Encode(human.human_name));
+                    this.xb = @Html.Raw(Json.Encode(human.human_sex));
+                    this.emal = @Html.Raw(Json.Encode(human.human_email));
+                    this.dh = @Html.Raw(Json.Encode(human.human_telephone));
+                    this.qq =@Html.Raw(Json.Encode(human.human_qq));
+                    this.sj = @Html.Raw(Json.Encode(human.human_mobilephone));
+                    this.dz = @Html.Raw(Json.Encode(human.human_address));
+                    this.yb1 = @Html.Raw(Json.Encode(human.human_postcode));
+                    this.gj = @Html.Raw(Json.Encode(human.human_nationality));
+                    this.csd = @Html.Raw(Json.Encode(human.human_birthplace));
+
+                    var a = @Html.Raw(Json.Encode(human.human_birthday));
+                    //console.log(a);
+                    const isoDate = a.replace(/(\d{2})\/(\d{2})\/(\d{4})/, '$3-$1-$2'); // 转换为 ISO 格式的日期字符串
+                    const date = new Date(isoDate); // 解析 ISO 格式的日期时间
+                    const formattedDateTime = date.toLocaleDateString(); // 转换为本地格式，例如 2023/8/30
+                   // console.log(formattedDateTime);
+                    this.sr = formattedDateTime; // 更新日期时间字段的值
+
+                    this.mz = @Html.Raw(Json.Encode(human.human_race));
+                    this.zjxy = @Html.Raw(Json.Encode(human.human_religion));
+                    this.zm = @Html.Raw(Json.Encode(human.human_party));
+                    this.idc = @Html.Raw(Json.Encode(human.human_id_card));
+                    this.nl = @Html.Raw(Json.Encode(human.human_age));
+                    this.xl = @Html.Raw(Json.Encode(human.human_educated_degree));
+                    this.nx = @Html.Raw(Json.Encode(human.human_educated_years));
+                    this.zy = @Html.Raw(Json.Encode(human.human_educated_major));
+
+                    this.xc = @Html.Raw(Json.Encode(human.salary_standard_name));
+                    this.tc = @Html.Raw(Json.Encode(human.human_speciality));
+                    this.ah = @Html.Raw(Json.Encode(human.human_hobby));
+                    this.lul = @Html.Raw(Json.Encode(human.human_histroy_records));
+                    this.bz = @Html.Raw(Json.Encode(human.remark));
+                    this.khx =@Html.Raw(Json.Encode(human.human_bank));
+                    this.zhah =@Html.Raw(Json.Encode(human.human_account));
+                    this.sh =@Html.Raw(Json.Encode(human.human_society_security_id));
+                     this.gx=@Html.Raw(Json.Encode(human.human_family_membership));
+
+                    this.imageUrl =@Html.Raw(Json.Encode(human.human_picture));
+                    this.fhr=@Html.Raw(Json.Encode(human.checker));
+
+
+                },
+                jc() {
+                    var name = "职称"
+                    axios.get("/ZhaoP/JLDCXList?name=" + name)
+                        .then(res => {
+                            this.optionsjc = res.data;
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                },
+                handleAvatarSuccess(res, file) {
+                    this.imageUrl = URL.createObjectURL(file.raw);
+                    this.ima = res.path;
+
+
+                },
+                beforeAvatarUpload(file) {
+
+                },
+                ah1() {
+                    var name = "爱好"
+                    axios.get("/ZhaoP/JLDCXList?name=" + name)
+                        .then(res => {
+                            this.optionsah = res.data;
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                },
+                tc1() {
+                    var name = "特长"
+                    axios.get("/ZhaoP/JLDCXList?name=" + name)
+                        .then(res => {
+                            this.optionstc = res.data;
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                },
+                zy1() {
+                    var name = "专业"
+                    axios.get("/ZhaoP/JLDCXList?name=" + name)
+                        .then(res => {
+                            this.optionszy = res.data;
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                },
+                nx1() {
+                    var name = "教育年限"
+                    axios.get("/ZhaoP/JLDCXList?name=" + name)
+                        .then(res => {
+                            this.optionsnx = res.data;
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                },
+                xl1() {
+                    var name = "学历"
+                    axios.get("/ZhaoP/JLDCXList?name=" + name)
+                        .then(res => {
+                            this.optionsxl = res.data;
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                },
+                zm1() {
+                    var name = "政治面貌"
+                    axios.get("/ZhaoP/JLDCXList?name=" + name)
+                        .then(res => {
+                            this.optionszm = res.data;
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                },
+                zjxy1() {
+                    var name = "宗教信仰"
+                    axios.get("/ZhaoP/JLDCXList?name=" + name)
+                        .then(res => {
+                            this.optionszjxy = res.data;
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                },
+                mz1() {
+                    var name = "民族"
+                    axios.get("/ZhaoP/JLDCXList?name=" + name)
+                        .then(res => {
+                            this.optionsmz = res.data;
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                },
+                gj1() {
+                    var name = "国籍"
+                    axios.get("/ZhaoP/JLDCXList?name=" + name)
+                        .then(res => {
+                            this.optionsgj = res.data;
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                },
+
+
+
+
+            },
+            mounted: function () {
+                this.find();
+                this.jc();
+                this.gj1();
+                this.mz1();
+                this.zjxy1();
+                this.zm1();
+                this.xl1();
+                this.nx1();
+                this.zy1();
+                this.tc1();
+                this.ah1();
+            }
+        })
+    </script>
+</body>
+</html>
+
+
+
+
+

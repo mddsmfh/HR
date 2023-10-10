@@ -1,0 +1,132 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet"
+          href="../../css/table.css" type="text/css">
+    <script type="text/javascript"
+            src="../../javascript/comm/comm.js">
+    </script>
+    <script type="text/javascript" src="../../javascript/jquery-1.7.2.js"></script>
+    <script type="text/javascript">
+        function deleteMajor(id) {
+            $.ajax({
+                url: "/HR_Fist/customiz/customizAction!doDeleteMajorKind",
+                data: "cmk.mfkId=" + id,
+                dataType: "text",
+                success: function () {
+                    alert("删除成功！");
+                    location.reload();
+                },
+                type: "post"
+            });
+
+        }
+    </script>
+
+    <script src="~/Scripts/vue/dist/vue.js"></script>
+    <script src="~/Scripts/element-ui/lib/index.js"></script>
+    <link href="~/Scripts/element-ui/lib/theme-chalk/index.css" rel="stylesheet" />
+    <script src="~/Scripts/axios/dist/axios.js"></script>
+    <style type="text/css">
+        .el-table tr {
+            background-color: #FFFFCC;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <form method="post" action="">
+            <table width="100%">
+                <tr>
+                    <td>
+                        <font color="black">
+                            您正在做的业务是：人力资源--客户化设置--人力资源档案管理设置--职位分类设置
+                        </font>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        <input type="button" value="添加" class="BUTTON_STYLE1"
+                                onclick="window.location.href='/KeHu/ZhiWeiTJ'">
+                    </td>
+                </tr>
+            </table>
+            <el-table :data="tableData"
+                      style="width: 100%"
+                      :header-cell-style="{color: '#C8D6F1', fontSize: '18px', height:'64px',  background: '#FFFFCC'}">
+                <el-table-column fixed
+                                 prop="major_kind_id"
+                                 label="职位分类编号">
+                </el-table-column>
+                <el-table-column fixed
+                                 prop="major_kind_name"
+                                 label="职位分类名称">
+                </el-table-column>
+
+                <el-table-column label="变更">
+                    <template slot-scope="scope">
+                        <el-button size="mini"
+                                   type="danger"
+                                   v-on:click="handleDelete( scope.row)">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <p>
+        </form>
+    </div>
+
+    <script type="text/javascript">
+        var vm = new Vue({
+            el: "#app",
+            data() {
+                return {
+                    tableData: [],
+                }
+            },
+            methods: {
+                //进行查询所有信息
+                fill() {
+                    axios.get("/KeHu/ZhiWeiCX")
+                        .then(res => {
+                            this.tableData = res.data;
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                },
+                handleDelete(row) {
+                    if (confirm("是否进行删除!")) {
+                        //console.log(row);
+                        axios.get("/KeHu/ZhiWeiSc?id=" + row.mfk_id)
+                            .then(res => {
+                                if (res.data == "1") {
+                                    location.href = 'ZhiWei';
+                                    alert("删除成功");
+                                } else {
+
+                                }
+                            })
+                            .catch(err => {
+
+                            })
+                    } else {
+
+                    }
+                }
+            },
+            mounted: function () {
+                this.fill();
+            }
+        }
+        )
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,265 @@
+﻿
+@{
+    Layout = null;
+}
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-trasitional.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <link rel="stylesheet"
+          href="../../../css/table.css" type="text/css">
+    <link rel="stylesheet"
+          href="../../../css/cwcalendar.css" type="text/css">
+    <script type="text/javascript"
+            src="../../../javascript/comm/comm.js">
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/comm/list.js">
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/calendar-ch.js">
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/jquery-1.7.2.js">
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/locate.js">
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/select.js">
+    </script>
+
+    <script type="text/javascript">
+        function doDelete(id) {
+            if (window.confirm("确认删除该项纪录？")) {
+                window.location.href("/HR_Fist/recruit/recruitAction!deletePosition?emajorRelease.mreId=" + id)
+            }
+
+        }
+    </script>
+
+    <script src="~/Scripts/vue/dist/vue.js"></script>
+    <script src="~/Scripts/element-ui/lib/index.js"></script>
+    <link href="~/Scripts/element-ui/lib/theme-chalk/index.css" rel="stylesheet" />
+    <script src="~/Scripts/axios/dist/axios.js"></script>
+    <style type="text/css">
+        .el-table tr {
+            background-color: #FFFFCC;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="app">
+        <form method="post" action="/HR_Fist/recruit/recruitAction!findMajor" name="fm">
+            <input type="hidden" name="utilBean.currPage" id="page" />
+            <table width="100%">
+                <tr>
+                    <td>
+                        <font color="black">
+                            您正在做的业务是：人力资源--招聘管理--职位发布管理--职位发布变更
+                        </font>
+                    </td>
+                </tr>
+
+            </table>
+            当前可变更是职位发布总数：{{totals}}例
+            <el-table :data="tableData"
+                      style="width: 100%"
+                      :header-cell-style="{color: '#C8D6F1', fontSize: '18px', height:'64px',  background: '#FFFFCC'}">
+                <el-table-column fixed
+                                 prop="major_name"
+                                 label="职位名称"
+                                 width="150">
+                </el-table-column>
+                <el-table-column fixed
+                                 prop="second_kind_name"
+                                 label="公司名称"
+                                 width="150">
+                </el-table-column>
+                <el-table-column fixed
+                                 prop="human_amount"
+                                 label="招聘人数"
+                                 width="150">
+                </el-table-column>
+                <el-table-column fixed
+                                 prop="regist_time"
+                                 label="发布时间"
+                                 width="150">
+                </el-table-column>
+                <el-table-column fixed
+                                 prop="deadline"
+                                 label="截止时间"
+                                 width="150">
+                </el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button size="mini"
+                                   v-on:click="handleEdit(scope.row)">修改</el-button>
+                        <el-button size="mini"
+                                   type="danger"
+                                   v-on:click="handleDelete( scope.row)">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <p>
+                &nbsp;&nbsp;总数：{{totals}} 例 &nbsp;&nbsp;&nbsp;
+                <el-button v-on:click="goToFirstPage">首页</el-button>
+                <el-button v-on:click="goToPrevPage">上一页</el-button>
+                <el-button v-on:click="goToNextPage">下一页</el-button>
+                <el-button v-on:click="goToLastPage">尾页</el-button>
+                <el-input v-model="jumpPage" type="number" placeholder="跳转页码" style="width: 10%;"></el-input>
+                <el-button v-on:click="jumpToPage">跳转</el-button>
+        </form>
+        @*<script type="text/javascript">
+            function up(currPage) {
+                if (currPage <= 0) {
+                    document.getElementById("page").value = row;
+                } else {
+                    document.getElementById("page").value = currPage;
+                }
+                document.fm.submit();
+            }
+            function down(currPage, row) {
+                if (currPage >= row) {
+                    document.getElementById("page").value = row;
+                } else {
+                    document.getElementById("page").value = currPage;
+                }
+                document.fm.submit();
+            }
+            function tj(row) {
+                document.getElementById("page").value = document.getElementById("currPage").value;
+                if (document.getElementById("currPage").value > row) {
+                    alert("最大页数为" + row + ",当前为第" + row + "页 ");
+                    return false;
+                }
+                document.fm.submit();
+            }
+        </script>*@
+    </div>
+
+    <script type="text/javascript">
+        var vm = new Vue({
+            el: "#app",
+            data() {
+                return {
+                    tableData: [],
+                    currentPage: 1,
+                    pageSize: 2,
+                    total: 0,
+                    totals: 0,
+                    jumpPage: "",
+                }
+            },
+            methods: {
+                //进行查询所有信息
+                fill() {
+                    axios.get("/ZhaoP/ZYGCX", {
+                        params: {
+                            pageSize: this.pageSize,
+                            currentPage: this.currentPage
+                        }
+                    }).then(res => {
+                        var b = res.data.List;
+                        for (var i = 0; i < b.length; i++) {
+                            const isoDate = b[i].regist_time; // ISO 格式的日期时间
+                            const date = new Date(parseInt(isoDate.substr(6))); // 解析 Microsoft JSON 日期格式
+                            const formattedDateTime = date.toLocaleString(); // 转换为本地格式
+                            b[i].regist_time = formattedDateTime; // 更新日期时间字段的值
+
+                            const isoDate2 = b[i].deadline; // ISO 格式的日期时间
+                            const date2 = new Date(parseInt(isoDate2.substr(6))); // 解析 Microsoft JSON 日期格式
+                            const formattedDateTime2 = date2.toLocaleString(); // 转换为本地格式
+                            b[i].deadline = formattedDateTime2; // 更新日期时间字段的值
+                        }
+                            this.tableData = b;
+
+                            this.total = res.data.Rows;
+                            this.totals = res.data.Rowst;
+
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                },
+                handleEdit(row) {
+                    //console.log(row);
+                    location.href = "/ZhaoP/ZYGXiu?id=" + row.mre_id;
+                },
+                handleDelete(row) {
+                    if (confirm("是否进行删除!")) {
+                        //console.log(row);
+                        axios.get("/ZhaoP/ZYGSc?id=" + row.mre_id)
+                            .then(res => {
+                                if (res.data == "1") {
+                                    location.href = 'ZYG';
+                                } else {
+
+                                }
+                            })
+                            .catch(err => {
+
+                            })
+                    } else {
+
+                    }
+                },
+                goToFirstPage() {//首页
+                    this.currentPage = 1;
+                    this.fill();
+
+                },
+                goToPrevPage() {//上一页
+                    if (this.currentPage > 1) {
+                        this.currentPage--;
+                    } else {
+                        this.currentPage = 1;
+                    }
+                    this.fill();
+                },
+                goToNextPage() {//下一页
+                    //console.log("进入了：");
+                    if (this.currentPage == this.total) {
+                        this.currentPage == this.total;
+                    }
+                    else {
+                        this.currentPage++;
+                    }
+                    this.fill();
+                },
+                goToLastPage() {//尾页
+                    this.currentPage = this.total;
+                    this.fill();
+
+
+                },
+                jumpToPage() {//跳转
+                    const page = parseInt(this.jumpPage);
+                    if (page > this.total) {
+                        this.goToLastPage();
+                        this.jumpPage = '';
+                    } else if (page < 1) {
+                        this.goToFirstPage();
+                        this.jumpPage = '';
+                    } else {
+                        this.currentPage = page;
+                        this.fill();
+                        this.jumpPage = '';
+                    }
+                },
+
+            },
+            mounted: function () {
+                this.fill();
+            }
+        }
+        )
+    </script>
+
+</body>
+</html>

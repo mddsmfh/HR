@@ -1,0 +1,198 @@
+﻿
+@{
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <link rel="stylesheet"
+          href="../../../css/table.css" type="text/css">
+    <link rel="stylesheet"
+          href="../../../css/cwcalendar.css" type="text/css">
+    <script type="text/javascript"
+            src="../../../javascript/comm/comm.js">
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/comm/list.js">
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/calendar-ch.js">
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/jquery-1.7.2.js">
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/locate.js">
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/select.js">
+    </script>
+    <script type="text/javascript"
+            src="../../../javascript/comm/time.js">
+    </script>
+    <script type="text/javascript">
+        function search() {
+
+            if (document.getElementById("majorKindId").value == "0") {
+                document.getElementById("majorKindId").value = null;
+            }
+            document.resumeChooseForm.submit();
+        }
+    </script>
+
+    <script src="~/Scripts/vue/dist/vue.js"></script>
+    <script src="~/Scripts/element-ui/lib/index.js"></script>
+    <link href="~/Scripts/element-ui/lib/theme-chalk/index.css" rel="stylesheet" />
+    <script src="~/Scripts/axios/dist/axios.js"></script>
+    <style type="text/css">
+        .el-table tr {
+            background-color: #FFFFCC;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="app">
+        <form id="recruitAction!findEngageResume?a=list" name="resumeChooseForm" action="" method="post">
+            <input type="hidden" name="engageResume.humanMajorKindName"
+                   id="majorKindName" />
+            <input type="hidden" name="engageResume.humanMajorName"
+                   id="majorName" />
+            <input type="hidden" name="engageResume.checkStatus"
+                   value="false" />
+
+            <table width="100%">
+                <tr>
+                    <td>
+                        <font color="black">
+                            您正在做的业务是：人力资源--招聘管理--面试管理--面试结果登记
+                        </font>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+
+                        <input type="button" value="开始" class="BUTTON_STYLE1"
+                               v-on:click="cx()">
+                    </td>
+                </tr>
+            </table>
+            <table width="100%" border="1" cellpadding=0 cellspacing=1
+                   bordercolorlight=#848284 bordercolordark=#eeeeee
+                   class="TABLE_STYLE1">
+
+                <tr>
+                    <td class="TD_STYLE1" width="30%">
+                        请选择职位分类
+                    </td>
+                    <td class="TD_STYLE2" width="30%">
+
+                        <select name="engageResume.humanMajorKindId" v-on:change="handleMajorKindChange()" style="width: 290px;height: 100px" multiple="multiple" class="SELECT_STYLE2" v-model="optionstfl">
+                            <option v-for="option in optionsfl">{{ option.major_kind_name }}</option>
+                        </select>
+
+                        <select name="engageResume.humanMajorId" multiple="multiple" style="width: 290px;height: 100px" id="majorId" size="5"
+                                class="SELECT_STYLE2" v-model="optionstmc">
+                            <option v-for="option in optionsmc">{{ option.major_name }}</option>
+                        </select>
+
+
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="TD_STYLE1" width="30%">
+                        请输入关键字
+                    </td>
+                    <td width="84%">
+                        <input type="text" name="utilBean.primarKey" v-model="gj"
+                               class="INPUT_STYLE2" />
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="TD_STYLE1" width="30%">
+                        请输入登记时间
+                    </td>
+                    <td width="84%" class="TD_STYLE2">
+                        <input type="hidden" name="utilBean.datePropertyName" value="registTime" />
+
+                        <input type="text" name="utilBean.startDate" onclick="aa('utilBean.startDate')"
+                               style="width: 14%" class="INPUT_STYLE2">
+                        至
+                        <input type="text" name="utilBean.endDate"
+                               style="width: 14%" class="INPUT_STYLE2" onclick="aa('utilBean.endDate')">
+                        （YYYY-MM-DD）
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+    <script type="text/javascript">
+        var vm = new Vue({
+            el: "#app",
+            data() {
+                return {
+                    optionsfl: [],
+                    optionstfl: [],
+                    optionsmc: [],
+                    optionstmc: [],
+                    gj: "",
+
+                }
+            },
+            methods: {
+                cx() {
+
+                    var startDateInput = document.getElementsByName('utilBean.startDate')[0];
+                    var endDateInput = document.getElementsByName('utilBean.endDate')[0];
+
+                    var startDate = startDateInput.value;
+                    var endDate = endDateInput.value;
+                    //console.log('起始时间:', startDate);
+                    //console.log('终止时间:', endDate);
+
+
+                    var queryString = "?fenl=" + encodeURIComponent(this.optionstfl[0]) + "&namemc=" + encodeURIComponent(this.optionstmc[0]) + "&Gjz=" + encodeURIComponent(this.gj) + "&qsj=" + encodeURIComponent(startDate) + "&zsj=" + encodeURIComponent(endDate);
+                    var url = "/ZhaoP/MSDC" + queryString;
+
+                    // 跳转到指定的 URL
+                    location.href = url;
+                },
+                handleMajorKindChange() {
+                    //console.log(this.optionstfl[0]);
+                    axios.get("/ZhaoP/JLCCXList?name=" + this.optionstfl[0])
+                        .then(res => {
+                            this.optionsmc = res.data;
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                },
+                fl() {
+                    axios.get("/KeHu/ZhiWeiCX")
+                        .then(res => {
+                            this.optionsfl = res.data;
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                }
+            },
+            mounted: function () {
+                this.fl();
+
+            }
+        })
+    </script>
+
+
+</body>
+</html>
+
